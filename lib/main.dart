@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:coinbit_verifier/controller/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:rust_mpc_ffi/lib.dart';
@@ -40,6 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final dkgText = TextEditingController();
   final presignText = TextEditingController();
   final signText = TextEditingController();
+  final uintText = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             });
                             var doDkg = await CBRustMpc().proccessDkgString(2);
                             dkgText.text = doDkg.toString();
+                            await Storage.saveKey(shareKey, doDkg.toString());
                             setState(() {
                               dkgState = false;
                             });
@@ -106,22 +110,18 @@ class _MyHomePageState extends State<MyHomePage> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red)),
                           onPressed: () async {
-                            if (dkgText.text.isNotEmpty) {
-                              await Storage.saveKey(shareKey, dkgText.text);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      duration: Duration(seconds: 3),
-                                      backgroundColor: Colors.green,
-                                      content: Text("Key Saved")));
+                            var key = await Storage.loadKey(shareKey);
+                            if (key != null) {
+                              dkgText.text = key;
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       duration: Duration(seconds: 3),
                                       backgroundColor: Colors.red,
-                                      content: Text("Can not save empty key")));
+                                      content: Text("Key Shared Not Found")));
                             }
                           },
-                          child: const Text("Save Key"),
+                          child: const Text("Load Key"),
                         ),
                       ),
                     ],
@@ -153,11 +153,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             setState(() {
                               presignState = true;
                             });
-                            final key = await Storage.loadKey(shareKey);
-                            if (key != null) {
-                              var doPresign =
-                                  await CBRustMpc().offlineSignWithJson(2, key);
+                            if (dkgText.text.isNotEmpty) {
+                              var doPresign = await CBRustMpc()
+                                  .offlineSignWithJson(2, dkgText.text);
                               presignText.text = doPresign.toString();
+                              await Storage.saveKey(
+                                  presignKey, doPresign.toString());
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -187,23 +188,19 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: ButtonStyle(
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red)),
-                          onPressed: () {
-                            if (dkgText.text.isNotEmpty) {
-                              Storage.saveKey(presignKey, presignText.text);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      duration: Duration(seconds: 3),
-                                      backgroundColor: Colors.green,
-                                      content: Text("Key Saved")));
+                          onPressed: () async {
+                            var key = await Storage.loadKey(presignKey);
+                            if (key != null) {
+                              dkgText.text = key;
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       duration: Duration(seconds: 3),
                                       backgroundColor: Colors.red,
-                                      content: Text("Can not save empty key")));
+                                      content: Text("Key Shared Not Found")));
                             }
                           },
-                          child: const Text("Save Key Share"),
+                          child: const Text("Load Presign"),
                         ),
                       ),
                     ],
@@ -218,6 +215,52 @@ class _MyHomePageState extends State<MyHomePage> {
                     "Sign Proccess",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    maxLines: 3,
+                    minLines: 3,
+                    controller: uintText,
+                    decoration:
+                        const InputDecoration(hintText: "Input UINT8LIST"),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          signState = true;
+                        });
+                        if (presignText.text.isNotEmpty &&
+                            uintText.text.isNotEmpty) {
+                          var uint = uintText as List<int>;
+                          var doPresign = await CBRustMpc().sign(
+                            2,
+                            presignText.text,
+                            Uint8List.fromList(uint),
+                          );
+                          signText.text = doPresign.toString();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  duration: Duration(seconds: 3),
+                                  backgroundColor: Colors.red,
+                                  content: Text("Signature Empty")));
+                        }
+
+                        setState(() {
+                          signState = false;
+                        });
+                      },
+                      child: signState == true
+                          ? Transform.scale(
+                              scale: 0.8,
+                              child: const CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Text("Do Sign (With Index 2)"),
+                    ),
+                  ),
                   TextField(
                     maxLines: 3,
                     minLines: 3,
@@ -226,44 +269,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         const InputDecoration(hintText: "RSV (Signature)"),
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            setState(() {
-                              signState = true;
-                            });
-                            final key = await Storage.loadKey(presignKey);
-                            if (key != null) {
-                              var doPresign =
-                                  await CBRustMpc().sign(2, key, "message");
-                              signText.text = doPresign.toString();
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      duration: Duration(seconds: 3),
-                                      backgroundColor: Colors.red,
-                                      content: Text("Signature Empty")));
-                            }
-
-                            setState(() {
-                              signState = false;
-                            });
-                          },
-                          child: signState == true
-                              ? Transform.scale(
-                                  scale: 0.8,
-                                  child: const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text("So Sign (With Index 2)"),
-                        ),
-                      ),
-                    ],
-                  )
                 ],
               )
             ],

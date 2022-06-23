@@ -367,7 +367,6 @@
 					"\"${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 					"\"${PODS_ROOT}/../.symlinks/plugins/rust_mpc_ffi/ios\"",
 					/usr/lib/swift,
-					"ios/target/universal/$(CONFIGURATION:lower)",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -513,7 +512,6 @@
 					"\"${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 					"\"${PODS_ROOT}/../.symlinks/plugins/rust_mpc_ffi/ios\"",
 					/usr/lib/swift,
-					"ios/target/universal/$(CONFIGURATION:lower)",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -553,7 +551,6 @@
 					"\"${DT_TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
 					"\"${PODS_ROOT}/../.symlinks/plugins/rust_mpc_ffi/ios\"",
 					/usr/lib/swift,
-					"ios/target/universal/$(CONFIGURATION:lower)",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
