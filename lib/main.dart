@@ -1,21 +1,79 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:coinbit_verifier/controller/storage.dart';
+import 'package:coinbit_verifier/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:rust_mpc_ffi/lib.dart';
 
 String shareKey = "shared-key";
 String presignKey = "presign-key";
 String signKey = "sign-key";
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  AwesomeNotifications().initialize('resource://drawable/notify', [
+    NotificationChannel(
+        channelKey: "basic_channel",
+        channelName: "Basic Notification",
+        importance: NotificationImportance.High,
+        channelShowBadge: true,
+        channelDescription: "Descriptions")
+  ]);
   CBRustMpc().setup();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    AwesomeNotifications().isNotificationAllowed().then(
+      (value) {
+        if (!value) {
+          AwesomeNotifications()
+              .requestPermissionToSendNotifications()
+              .then((value) => Navigator.of(context).pop());
+        }
+      },
+    );
+    FirebaseMessaging.instance
+        .getToken()
+        .then((value) => log(value.toString()));
+    FirebaseMessaging.instance
+        .subscribeToTopic("dkg")
+        .then((value) => print("SUBSCRIBE TO DKG TOPIC"));
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+      createNotification();
+      CBRustMpc().proccessDkgString(2).then((value) => print(value));
+    });
+    super.initState();
+  }
+
+  void createNotification() async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: DateTime.now().millisecondsSinceEpoch.remainder(1),
+          channelKey: 'basic_channel',
+          body: "TEST"),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -157,6 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               var doPresign = await CBRustMpc()
                                   .offlineSignWithJson(2, dkgText.text);
                               presignText.text = doPresign.toString();
+                              
                               await Storage.saveKey(
                                   presignKey, doPresign.toString());
                             } else {
@@ -189,9 +248,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               backgroundColor:
                                   MaterialStateProperty.all(Colors.red)),
                           onPressed: () async {
+                            
                             var key = await Storage.loadKey(presignKey);
                             if (key != null) {
-                              dkgText.text = key;
+                              presignText.text = key;
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
