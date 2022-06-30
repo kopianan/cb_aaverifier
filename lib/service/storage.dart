@@ -15,4 +15,13 @@ class Storage {
     final result = await _storage.read(key: key);
     return result;
   }
+
+  static Future<Map<String, String>> loadAllKey() async {
+    final result = await _storage.readAll();
+    return result;
+  }
+
+  static Future<void> clear() async {
+    await _storage.deleteAll();
+  }
 }

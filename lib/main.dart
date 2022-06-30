@@ -1,31 +1,24 @@
-import 'dart:developer';
-import 'dart:typed_data';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:coinbit_verifier/controller/storage.dart';
+import 'dart:typed_data';
+ 
+import 'package:coinbit_verifier/pages/verifier/verifier_page.dart';
+import 'package:coinbit_verifier/service/fcm_service.dart'; 
+import 'package:coinbit_verifier/service/notifications_service.dart'; 
 import 'package:coinbit_verifier/firebase_options.dart';
+import 'package:coinbit_verifier/pages/dashboard/dashboard_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:rust_mpc_ffi/lib.dart';
 
-String shareKey = "shared-key";
-String presignKey = "presign-key";
-String signKey = "sign-key";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  NotificationService.initializeAwesomeNotification();
 
-  AwesomeNotifications().initialize('resource://drawable/notify', [
-    NotificationChannel(
-        channelKey: "basic_channel",
-        channelName: "Basic Notification",
-        importance: NotificationImportance.High,
-        channelShowBadge: true,
-        channelDescription: "Descriptions")
-  ]);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  FCMService.subscribeFCM();
   CBRustMpc().setup();
   runApp(const MyApp());
 }
@@ -39,49 +32,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    AwesomeNotifications().isNotificationAllowed().then(
-      (value) {
-        if (!value) {
-          AwesomeNotifications()
-              .requestPermissionToSendNotifications()
-              .then((value) => Navigator.of(context).pop());
-        }
-      },
-    );
-    FirebaseMessaging.instance
-        .getToken()
-        .then((value) => log(value.toString()));
-    FirebaseMessaging.instance
-        .subscribeToTopic("dkg")
-        .then((value) => print("SUBSCRIBE TO DKG TOPIC"));
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-      createNotification();
-      CBRustMpc().proccessDkgString(2).then((value) => print(value));
-    });
-    super.initState();
-  }
-
-  void createNotification() async {
-    await AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: DateTime.now().millisecondsSinceEpoch.remainder(1),
-          channelKey: 'basic_channel',
-          body: "TEST"),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      routes: {
+        "dkg_page": (_) => DKGPage(),
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: const DashboardPage(),
     );
   }
 }
@@ -105,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Verifier"),
+        title: const Text("Verifier"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -134,137 +94,136 @@ class _MyHomePageState extends State<MyHomePage> {
                         const InputDecoration(hintText: "Share Key Here"),
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            setState(() {
-                              dkgState = true;
-                            });
-                            var doDkg = await CBRustMpc().proccessDkgString(2);
-                            dkgText.text = doDkg.toString();
-                            await Storage.saveKey(shareKey, doDkg.toString());
-                            setState(() {
-                              dkgState = false;
-                            });
-                          },
-                          child: (dkgState)
-                              ? Transform.scale(
-                                  scale: 0.8,
-                                  child: const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text("Do DKG (With Index 2)"),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 2,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red)),
-                          onPressed: () async {
-                            var key = await Storage.loadKey(shareKey);
-                            if (key != null) {
-                              dkgText.text = key;
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      duration: Duration(seconds: 3),
-                                      backgroundColor: Colors.red,
-                                      content: Text("Key Shared Not Found")));
-                            }
-                          },
-                          child: const Text("Load Key"),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(height: 60),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Offline Sign Proccess",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextField(
-                    maxLines: 3,
-                    minLines: 3,
-                    controller: presignText,
-                    decoration:
-                        const InputDecoration(hintText: "Presign Key Here"),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            setState(() {
-                              presignState = true;
-                            });
-                            if (dkgText.text.isNotEmpty) {
-                              var doPresign = await CBRustMpc()
-                                  .offlineSignWithJson(2, dkgText.text);
-                              presignText.text = doPresign.toString();
-                              
-                              await Storage.saveKey(
-                                  presignKey, doPresign.toString());
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      duration: Duration(seconds: 3),
-                                      backgroundColor: Colors.red,
-                                      content: Text("Share Key Empty")));
-                            }
+                  //     Row(
+                  //       children: [
+                  //         Expanded(
+                  //           flex: 3,
+                  //           child: ElevatedButton(
+                  //             onPressed: () async {
+                  //               setState(() {
+                  //                 dkgState = true;
+                  //               });
+                  //               var doDkg = await CBRustMpc().proccessDkgString(2);
+                  //               dkgText.text = doDkg.toString();
+                  //               await Storage.saveKey(SHAREKEY, doDkg.toString());
+                  //               setState(() {
+                  //                 dkgState = false;
+                  //               });
+                  //             },
+                  //             child: (dkgState)
+                  //                 ? Transform.scale(
+                  //                     scale: 0.8,
+                  //                     child: const CircularProgressIndicator(
+                  //                       color: Colors.white,
+                  //                     ),
+                  //                   )
+                  //                 : const Text("Do DKG (With Index 2)"),
+                  //           ),
+                  //         ),
+                  //         const SizedBox(width: 20),
+                  //         Expanded(
+                  //           flex: 2,
+                  //           child: ElevatedButton(
+                  //             style: ButtonStyle(
+                  //                 backgroundColor:
+                  //                     MaterialStateProperty.all(Colors.red)),
+                  //             onPressed: () async {
+                  //               var key = await Storage.loadKey(SHAREKEY);
+                  //               if (key != null) {
+                  //                 dkgText.text = key;
+                  //               } else {
+                  //                 ScaffoldMessenger.of(context).showSnackBar(
+                  //                     SnackBar(
+                  //                         duration: Duration(seconds: 3),
+                  //                         backgroundColor: Colors.red,
+                  //                         content: Text("Key Shared Not Found")));
+                  //               }
+                  //             },
+                  //             child: const Text("Load Key"),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     )
+                  //   ],
+                  // ),
+                  // const SizedBox(height: 60),
+                  // Column(
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: [
+                  //     const Text(
+                  //       "Offline Sign Proccess",
+                  //       style: TextStyle(fontWeight: FontWeight.bold),
+                  //     ),
+                  //     TextField(
+                  //       maxLines: 3,
+                  //       minLines: 3,
+                  //       controller: presignText,
+                  //       decoration:
+                  //           const InputDecoration(hintText: "Presign Key Here"),
+                  //     ),
+                  //     const SizedBox(height: 20),
+                  //     Row(
+                  //       children: [
+                  //         Expanded(
+                  //           flex: 3,
+                  //           child: ElevatedButton(
+                  //             onPressed: () async {
+                  //               setState(() {
+                  //                 presignState = true;
+                  //               });
+                  //               if (dkgText.text.isNotEmpty) {
+                  //                 var doPresign = await CBRustMpc()
+                  //                     .offlineSignWithJson(2, dkgText.text);
+                  //                 presignText.text = doPresign.toString();
 
-                            setState(() {
-                              presignState = false;
-                            });
-                          },
-                          child: presignState == true
-                              ? Transform.scale(
-                                  scale: 0.8,
-                                  child: const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  ),
-                                )
-                              : const Text("Do Presign (With Index 2)"),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        flex: 2,
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red)),
-                          onPressed: () async {
-                            
-                            var key = await Storage.loadKey(presignKey);
-                            if (key != null) {
-                              presignText.text = key;
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      duration: Duration(seconds: 3),
-                                      backgroundColor: Colors.red,
-                                      content: Text("Key Shared Not Found")));
-                            }
-                          },
-                          child: const Text("Load Presign"),
-                        ),
-                      ),
-                    ],
-                  )
+                  //                 await Storage.saveKey(
+                  //                     PRESIGNKEY, doPresign.toString());
+                  //               } else {
+                  //                 ScaffoldMessenger.of(context).showSnackBar(
+                  //                     const SnackBar(
+                  //                         duration: Duration(seconds: 3),
+                  //                         backgroundColor: Colors.red,
+                  //                         content: Text("Share Key Empty")));
+                  //               }
+
+                  //               setState(() {
+                  //                 presignState = false;
+                  //               });
+                  //             },
+                  //             child: presignState == true
+                  //                 ? Transform.scale(
+                  //                     scale: 0.8,
+                  //                     child: const CircularProgressIndicator(
+                  //                       color: Colors.white,
+                  //                     ),
+                  //                   )
+                  //                 : const Text("Do Presign (With Index 2)"),
+                  //           ),
+                  //         ),
+                  //         const SizedBox(width: 20),
+                  //         Expanded(
+                  //           flex: 2,
+                  //           child: ElevatedButton(
+                  //             style: ButtonStyle(
+                  //                 backgroundColor:
+                  //                     MaterialStateProperty.all(Colors.red)),
+                  //             onPressed: () async {
+                  //               var key = await Storage.loadKey(PRESIGNKEY);
+                  //               if (key != null) {
+                  //                 presignText.text = key;
+                  //               } else {
+                  //                 ScaffoldMessenger.of(context).showSnackBar(
+                  //                     const SnackBar(
+                  //                         duration: Duration(seconds: 3),
+                  //                         backgroundColor: Colors.red,
+                  //                         content: Text("Key Shared Not Found")));
+                  //               }
+                  //             },
+                  //             child: const Text("Load Presign"),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     )
                 ],
               ),
               const SizedBox(height: 60),
@@ -337,4 +296,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+}
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("onBackgroundMessage: $message");
 }

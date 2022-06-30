@@ -34,10 +34,12 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_secure_storage: ^5.0.2
+  pointycastle: ^3.6.0
   rust_mpc_ffi:
     git:
       url: https://github.com/kopianan/rust_mpc_ffi
       ref: master
+  web3dart: ^2.3.5
 
 dev_dependencies:
   flutter_lints: ^2.0.0
