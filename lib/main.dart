@@ -1,9 +1,8 @@
-
 import 'dart:typed_data';
- 
-import 'package:coinbit_verifier/pages/verifier/verifier_page.dart';
-import 'package:coinbit_verifier/service/fcm_service.dart'; 
-import 'package:coinbit_verifier/service/notifications_service.dart'; 
+import 'package:coinbit_verifier/pages/dkg/dkg_page.dart';
+import 'package:coinbit_verifier/pages/sign/sign_page.dart';
+import 'package:coinbit_verifier/service/fcm_service.dart';
+import 'package:coinbit_verifier/service/notifications_service.dart';
 import 'package:coinbit_verifier/firebase_options.dart';
 import 'package:coinbit_verifier/pages/dashboard/dashboard_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -37,6 +36,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       routes: {
         "dkg_page": (_) => DKGPage(),
+        "sign_page": (_) => SignPage(),
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,

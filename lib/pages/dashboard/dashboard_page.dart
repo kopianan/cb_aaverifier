@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:coinbit_verifier/models/tx_object_model.dart';
 import 'package:coinbit_verifier/pages/key/key_page.dart';
-import 'package:coinbit_verifier/pages/verifier/verifier_page.dart';
 import 'package:coinbit_verifier/service/notifications_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -25,30 +25,50 @@ class _DashboardPageState extends State<DashboardPage> {
     NotificationService.checkPermission(context);
     FirebaseMessaging.instance.getInitialMessage();
 
-    AwesomeNotifications()
-        .actionStream
-        .listen((ReceivedNotification receivedNotification) {
-      print(receivedNotification.payload);
-      Storage.clear();
-      Navigator.of(context).pushNamed('dkg_page');
-    });
+    AwesomeNotifications().actionStream.listen(
+      (ReceivedNotification receivedNotification) {
+        if (receivedNotification.payload!['topics'] == "dkg") {
+          Navigator.of(context).pushNamed('dkg_page');
+        }
+        if (receivedNotification.payload!['topics'] == "sign") {
+          Navigator.of(context)
+              .pushNamed('sign_page', arguments: receivedNotification.payload);
+        }
+      },
+    );
+
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) {},
     );
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      if (message.notification != null) {
-        createNotification({"test": "test"});
-      }
+      print(message);
 
+      if (message.data['topics'] == 'sign') {
+        //Get TxObject Json
+        dynamic txObject = message.data['txObject'];
+        dynamic payload = message.data['payload'];
+
+        createSignNotification({
+          'payload': payload,
+          'txObject': txObject,
+          'topics': 'sign',
+        });
+      }
+      if (message.data['topics'] == 'dkg') {
+        createNotification({
+          "test": "test",
+          "topics": "dkg",
+        });
+      }
       if (message.data['topics'] == 'offlinesign') {
-        print(message.data['address']);
-        var sharedKey = await Storage.loadKey(message.data['address']);
-        CBRustMpc().offlineSignWithJson(2, sharedKey.toString()).then(
-          (value) async {
-            log("SAVE PRESIGN KEY TO LOCAL");
-            await Storage.saveKey(message.data['address'] + "pk", value);
-          },
-        );
+        var sharedKey = await Storage.loadSharedKey(message.data['address']);
+        log(sharedKey!);
+        await Future.delayed(Duration(seconds: 3)); 
+        final value =
+            await CBRustMpc().offlineSignWithJson(2, sharedKey.toString());
+
+        log("SAVE PRESIGN KEY TO LOCAL");
+        await Storage.savePresignKey(message.data['address'], value);
       }
     });
   }
@@ -60,6 +80,19 @@ class _DashboardPageState extends State<DashboardPage> {
           channelKey: 'basic_channel',
           body: "TEST",
           payload: payload),
+    );
+  }
+
+  void createSignNotification(Map<String, String> data) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: DateTime.now().millisecondsSinceEpoch.remainder(1),
+        channelKey: 'basic_channel',
+        body: "Sign",
+        title: "SIGN REQUEST",
+        //data => {topics, txObject, payload}
+        payload: data,
+      ),
     );
   }
 
@@ -90,10 +123,10 @@ class _DashboardPageState extends State<DashboardPage> {
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => KeyPage(),
+                    builder: (context) => const KeyPage(),
                   ));
                 },
-                child: Text("KEY PAGE"),
+                child: const Text("KEY PAGE"),
               )
             ],
           )

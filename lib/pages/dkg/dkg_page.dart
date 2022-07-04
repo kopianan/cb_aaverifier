@@ -17,24 +17,44 @@ class DKGPage extends StatefulWidget {
 }
 
 class _DKGPageState extends State<DKGPage> {
+  bool isDkg = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("DKG Proccess"),
+        centerTitle: true,
+        title: const Text("DKG Proccess"),
       ),
       body: Column(
         children: [
-          Text("User request for DKG"),
-          ElevatedButton(
+          Center(
+            child: const Text(
+              "User request for DKG",
+              style: TextStyle(fontSize: 30),
+            ),
+          ),
+          Container(
+            height: 60,
+            width: double.infinity,
+            padding: const EdgeInsets.all(10.0),
+            child: ElevatedButton(
               onPressed: () async {
+                //Shared Key Verifier
                 final value = await CBRustMpc().proccessDkgString(2);
+                //change hex to uint
+                // CBRustMpc().sign()
 
                 log("SAVE SHARE KEY TO LOCAL");
                 final eth = await MPCService().generateAddress(value);
-                await Storage.saveKey(eth.hex, value.toString());
+                await Storage.saveSharedKey(eth.hex, value.toString());
               },
-              child: Text("DO DKG"))
+              child: (!isDkg)
+                  ? Text("DO DKG")
+                  : Center(
+                      child: CircularProgressIndicator(),
+                    ),
+            ),
+          )
         ],
       ),
     );

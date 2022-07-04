@@ -7,6 +7,7 @@ class FCMService {
     final token = await FirebaseMessaging.instance.getToken();
     log(token.toString());
     await FirebaseMessaging.instance.subscribeToTopic("dkg");
+    await FirebaseMessaging.instance.subscribeToTopic("sign");
     await FirebaseMessaging.instance.subscribeToTopic("offlinesign");
     log("Subscribe to DKG and OFFLINESIGN");
   }
