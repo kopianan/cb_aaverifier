@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.21"
+  bloc:
+    dependency: "direct main"
+    description:
+      name: bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "8.0.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -106,6 +113,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
+  coinbit_ui_mobile:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: dev
+      resolved-ref: d2ec11e42647305636ad11101e258f89a252970b
+      url: "https://gitlab.com/coinbitid/coinbit_ui_mobile.git"
+    source: git
+    version: "0.0.2"
   collection:
     dependency: transitive
     description:
@@ -141,6 +157,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
+  equatable:
+    dependency: "direct main"
+    description:
+      name: equatable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -148,6 +171,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  fancy_counter:
+    dependency: transitive
+    description:
+      path: "."
+      ref: lib-fancy-controller
+      resolved-ref: d7f410d18a57ad1caf9fce6ecdf3789373b7f6d1
+      url: "https://gitlab.com/coinbitid/coinbit_ui_mobile"
+    source: git
+    version: "0.0.2"
   ffi:
     dependency: transitive
     description:
@@ -216,6 +248,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_bloc:
+    dependency: "direct main"
+    description:
+      name: flutter_bloc
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "8.0.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -223,6 +262,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  flutter_screenutil:
+    dependency: transitive
+    description:
+      name: flutter_screenutil
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.5.3+2"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -275,6 +321,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttericon:
+    dependency: transitive
+    description:
+      name: fluttericon
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  get:
+    dependency: transitive
+    description:
+      name: get
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.6.5"
   glob:
     dependency: transitive
     description:
@@ -366,6 +426,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   package_config:
     dependency: transitive
     description:
@@ -401,6 +468,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.6.0"
+  provider:
+    dependency: transitive
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.0.3"
   pub_semver:
     dependency: transitive
     description:
@@ -415,6 +489,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  readmore:
+    dependency: transitive
+    description:
+      name: readmore
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   rust_mpc_ffi:
     dependency: "direct main"
     description:
@@ -424,11 +505,32 @@ packages:
       url: "https://github.com/kopianan/rust_mpc_ffi"
     source: git
     version: "0.0.1"
+  shimmer:
+    dependency: transitive
+    description:
+      name: shimmer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.99"
+  slide_to_confirm:
+    dependency: transitive
+    description:
+      name: slide_to_confirm
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
+  smooth_page_indicator:
+    dependency: transitive
+    description:
+      name: smooth_page_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+2"
   source_span:
     dependency: transitive
     description:
@@ -464,6 +566,22 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  tab_indicator_styler:
+    dependency: transitive
+    description:
+      path: "."
+      ref: master
+      resolved-ref: ababcd0b23c9dc1b96adf8d1eb434b1eec2908fa
+      url: "https://github.com/anggaaryas/tab_indicator_styler"
+    source: git
+    version: "2.0.0"
+  tap_debouncer:
+    dependency: transitive
+    description:
+      name: tap_debouncer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.2"
   term_glyph:
     dependency: transitive
     description:

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../service/storage.dart';
+import '../../core/services/storage.dart';
 
 class KeyPage extends StatefulWidget {
   const KeyPage({Key? key}) : super(key: key);

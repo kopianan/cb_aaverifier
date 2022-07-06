@@ -28,13 +28,20 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   awesome_notifications: ^0.6.21
+  bloc: ^8.0.3
   cupertino_icons: ^1.0.2
+  equatable: ^2.0.3
   firebase_core: ^1.18.0
   firebase_messaging: ^11.4.2
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.0.1
   flutter_secure_storage: ^5.0.2
   pointycastle: ^3.6.0
+  coinbit_ui_mobile:
+    git:
+      url: https://gitlab.com/coinbitid/coinbit_ui_mobile.git
+      ref: dev
   rust_mpc_ffi:
     git:
       url: https://github.com/kopianan/rust_mpc_ffi
