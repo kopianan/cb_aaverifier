@@ -5,7 +5,7 @@ class Storage {
 
   static Future<void> saveSharedKey(String key, String value) async {
     try {
-      await _storage.write(key: key + "sk", value: value);
+      await _storage.write(key: "${key}sk", value: value);
     } catch (e) {
       throw Exception();
     }
@@ -13,19 +13,19 @@ class Storage {
 
   static Future<void> savePresignKey(String key, String value) async {
     try {
-      await _storage.write(key: key + 'pk', value: value);
+      await _storage.write(key: '${key}pk', value: value);
     } catch (e) {
       throw Exception();
     }
   }
 
   static Future<String?> loadPresignKey(String key) async {
-    final result = await _storage.read(key: key + "pk");
+    final result = await _storage.read(key: "${key}pk");
     return result;
   }
 
   static Future<String?> loadSharedKey(String key) async {
-    final result = await _storage.read(key: key + "sk");
+    final result = await _storage.read(key: "${key}sk");
     return result;
   }
 

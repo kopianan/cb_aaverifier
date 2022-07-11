@@ -1,10 +1,8 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:coinbit_verifier/core/services/fcm_service.dart';
 import 'package:coinbit_verifier/core/services/mpc_service.dart';
 import 'package:coinbit_verifier/core/services/storage.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:rust_mpc_ffi/lib.dart';
 
@@ -33,13 +31,10 @@ class DkgBloc extends Bloc<DkgEvent, DkgState> {
     on<ProccessPresign>(
       (event, emit) async {
         emit(GeneratingPresignKey());
-        print(event.address);
 
         final sharedKey = await Storage.loadSharedKey(event.address);
-        print("Shared key loaded");
         final presignKey =
             await cbRustMpc.offlineSignWithJson(event.index, sharedKey!);
-        print("Presing key");
         Storage.savePresignKey(event.address, presignKey);
         emit(OnPresignKeyGenerated());
       },

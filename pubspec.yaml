@@ -32,12 +32,19 @@ dependencies:
   cupertino_icons: ^1.0.2
   equatable: ^2.0.3
   firebase_core: ^1.18.0
+  camera: ^0.9.4+21
+  pinput: ^2.2.7
+  get_it: ^7.2.0
+  auto_route: ^4.0.0 
+  dio: ^4.0.6
   firebase_messaging: ^11.4.2
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_secure_storage: ^5.0.2
   pointycastle: ^3.6.0
+  test_encrypt: 
+    path: /Users/anan/Documents/References/test_encrypt-master
   coinbit_ui_mobile:
     git:
       url: https://gitlab.com/coinbitid/coinbit_ui_mobile.git

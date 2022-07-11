@@ -17,6 +17,8 @@ class NotificationService {
       ],
     );
 
+    
+
     return result;
   }
 
@@ -24,8 +26,9 @@ class NotificationService {
       Map<String, dynamic> customData) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: DateTime.now().millisecondsSinceEpoch.remainder(1),
+        id: DateTime.now().microsecond,
         channelKey: channelKey,
+        groupKey: 'dkg',
         body: customData['body'],
         title: customData['title'],
         payload: {'topics': customData['topics']},
@@ -37,8 +40,9 @@ class NotificationService {
       Map<String, dynamic> customData) async {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: DateTime.now().millisecondsSinceEpoch.remainder(1),
+        id: DateTime.now().microsecond,
         channelKey: channelKey,
+        groupKey: 'sign',
         body: customData['body'],
         title: customData['title'],
         payload: {
@@ -50,7 +54,7 @@ class NotificationService {
     );
   }
 
-  static void checkPermission(BuildContext context) async {
+  static Future<void> checkPermission(BuildContext context) async {
     final isAllow = await AwesomeNotifications().isNotificationAllowed();
     if (!isAllow) {
       await AwesomeNotifications().requestPermissionToSendNotifications();

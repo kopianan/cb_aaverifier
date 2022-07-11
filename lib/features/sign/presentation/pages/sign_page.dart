@@ -29,6 +29,8 @@ class _SignPageState extends State<SignPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: const Text("SIGN"),
       ),
       body: BlocBuilder<SignBloc, SignState>(
@@ -46,13 +48,13 @@ class _SignPageState extends State<SignPage> {
                     children: [
                       TableRow(
                         children: [
-                          CellLabelWidget(value: "FROM :"),
+                          CellLabelWidget(value: "From :"),
                           CellValueWidget(value: txObject['from']),
                         ],
                       ),
                       TableRow(
                         children: [
-                          CellLabelWidget(value: "TO :"),
+                          CellLabelWidget(value: "To :"),
                           CellValueWidget(value: txObject['to']),
                         ],
                       ),

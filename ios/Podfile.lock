@@ -1,4 +1,8 @@
 PODS:
+  - awesome_notifications (0.0.3):
+    - Flutter
+  - camera_avfoundation (0.0.1):
+    - Flutter
   - Firebase/CoreOnly (8.15.0):
     - FirebaseCore (= 8.15.0)
   - Firebase/Messaging (8.15.0):
@@ -66,13 +70,21 @@ PODS:
   - PromisesObjC (2.1.0)
   - rust_mpc_ffi (0.0.1):
     - Flutter
+  - secure_enclave (0.0.1):
+    - Flutter
+  - smart_auth (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
+  - awesome_notifications (from `.symlinks/plugins/awesome_notifications/ios`)
+  - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - rust_mpc_ffi (from `.symlinks/plugins/rust_mpc_ffi/ios`)
+  - secure_enclave (from `.symlinks/plugins/secure_enclave/ios`)
+  - smart_auth (from `.symlinks/plugins/smart_auth/ios`)
 
 SPEC REPOS:
   trunk:
@@ -87,6 +99,10 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  awesome_notifications:
+    :path: ".symlinks/plugins/awesome_notifications/ios"
+  camera_avfoundation:
+    :path: ".symlinks/plugins/camera_avfoundation/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_messaging:
@@ -97,8 +113,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   rust_mpc_ffi:
     :path: ".symlinks/plugins/rust_mpc_ffi/ios"
+  secure_enclave:
+    :path: ".symlinks/plugins/secure_enclave/ios"
+  smart_auth:
+    :path: ".symlinks/plugins/smart_auth/ios"
 
 SPEC CHECKSUMS:
+  awesome_notifications: 04530aafec8dac4635244ed4b4072f4aea6cc938
+  camera_avfoundation: 07c77549ea54ad95d8581be86617c094a46280d9
   Firebase: 5f8193dff4b5b7c5d5ef72ae54bb76c08e2b841d
   firebase_core: b14c1cfa29b9eb316345f74d1489328283825d6d
   firebase_messaging: 5374d57b2ca7a5efe1a150500b9a2451ca9ff5af
@@ -113,6 +135,8 @@ SPEC CHECKSUMS:
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   rust_mpc_ffi: 96755ce9509993cc5d6dceb64b5e9260398d3033
+  secure_enclave: 19492ea9711dba0d4a57a8f875228ebda5f36174
+  smart_auth: 4bedbc118723912d0e45a07e8ab34039c19e04f2
 
 PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
 

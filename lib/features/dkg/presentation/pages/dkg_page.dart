@@ -1,13 +1,7 @@
-import 'dart:developer';
 import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
-import 'package:coinbit_verifier/core/services/mpc_service.dart';
 import 'package:coinbit_verifier/features/dkg/presentation/bloc/dkg_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rust_mpc_ffi/lib.dart';
-
-import '../../../../core/services/mpc_service.dart';
-import '../../../../core/services/storage.dart';
 
 class DKGPage extends StatefulWidget {
   const DKGPage({Key? key}) : super(key: key);
@@ -23,12 +17,12 @@ class _DKGPageState extends State<DKGPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("DKG Proccess"),
+        title: const Text("Create Wallet"),
       ),
       body: BlocListener<DkgBloc, DkgState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (state is GeneratingSharedKey) {
-            showDkgDialog(context);
+            await showDkgDialog(context);
           }
           if (state is OnPresignKeyGenerated) {
             Navigator.of(context).popUntil(ModalRoute.withName('/home_page'));
@@ -45,11 +39,15 @@ class _DKGPageState extends State<DKGPage> {
                     radius: 40,
                     backgroundColor: Colors.grey[300],
                   ),
-                  const SizedBox(height: 20),
-                  const Center(
-                    child: Text(
-                      "Approve DKG Proccess to create wallet.",
-                      style: TextStyle(fontSize: 17, color: Colors.grey),
+                  const SizedBox(height: 30),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Center(
+                      child: Text(
+                        "Create wallet by click button below and wait for the proccess",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 17, color: Colors.grey),
+                      ),
                     ),
                   ),
                 ],
@@ -70,25 +68,49 @@ class _DKGPageState extends State<DKGPage> {
     );
   }
 
-  void showDkgDialog(BuildContext context) async {
-    showDialog(
+  showDkgDialog(BuildContext context) async {
+    await showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return BlocBuilder<DkgBloc, DkgState>(
           builder: (context, state) {
-            return Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Center(child: CircularProgressIndicator()),
-                  (state is GeneratingSharedKey)
-                      ? Text("Do DKG ...")
-                      : state is GeneratingPresignKey
-                          ? Text("Do Presign ...")
-                          : state is OnPresignKeyGenerated
-                              ? Text("Generated Finished")
-                              : Text("Waiting . . .")
-                ],
+            return Center(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                height: 200,
+                margin: const EdgeInsets.all(30),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Center(child: CircularProgressIndicator()),
+                          const SizedBox(height: 20),
+                          (state is GeneratingSharedKey)
+                              ? const Text("Do DKG ...")
+                              : state is GeneratingPresignKey
+                                  ? const Text("Do Presign ...")
+                                  : state is OnPresignKeyGenerated
+                                      ? const Text("Generated Finished")
+                                      : const Text("Waiting . . ."),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      "PLEASE DO NOT CLOSE APP",
+                      style:
+                          CBText.boldNominal20px.copyWith(color: Colors.grey),
+                    )
+                  ],
+                ),
               ),
             );
           },
