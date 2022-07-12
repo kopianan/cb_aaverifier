@@ -22,3 +22,8 @@ class OnPinMade extends RegisterState {
 class SavingHasWithBiometry extends RegisterState {}
 
 class OnHashSavedWithBiometry extends RegisterState {}
+
+class OnError extends RegisterState {
+  final String message;
+  OnError(this.message);
+}

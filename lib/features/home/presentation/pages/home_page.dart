@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
 import 'package:coinbit_verifier/core/services/notifications_service.dart';
 
 import 'package:coinbit_verifier/features/dkg/presentation/bloc/dkg_bloc.dart';
+import 'package:coinbit_verifier/features/home/presentation/bloc/home_bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,20 +26,25 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    NotificationService.checkPermission(context);
+
+    log(context.read<HomeBloc>().globalEncryptedSharedKey.toString(),
+        name: "GLOBAL HASH");
+
     FirebaseMessaging.instance.getInitialMessage();
 
-    AwesomeNotifications().actionStream.listen(
-      (ReceivedNotification receivedNotification) {
-        if (receivedNotification.payload!['topics'] == "dkg") {
-          Navigator.of(context).pushNamed('/dkg_page');
-        }
-        if (receivedNotification.payload!['topics'] == "sign") {
-          Navigator.of(context)
-              .pushNamed('/sign_page', arguments: receivedNotification.payload);
-        }
-      },
-    );
+    NotificationService.checkPermission(context).then((value) {
+      AwesomeNotifications().actionStream.listen(
+        (ReceivedNotification receivedNotification) {
+          if (receivedNotification.payload!['topics'] == "dkg") {
+            Navigator.of(context).pushNamed('/dkg_page');
+          }
+          if (receivedNotification.payload!['topics'] == "sign") {
+            Navigator.of(context).pushNamed('/sign_page',
+                arguments: receivedNotification.payload);
+          }
+        },
+      );
+    });
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (RemoteMessage message) {},
@@ -49,6 +58,7 @@ class _HomePageState extends State<HomePage> {
               ProccessPresign(
                 index: 2,
                 address: message.data['address'],
+                hash: context.read<HomeBloc>().globalHash!,
               ),
             );
       }
@@ -68,20 +78,29 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: const Text("VERIFIER"),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text(
-            "DKG Will receive notification. Click the banner and run DKG from the DKG Page",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.grey,
-              fontWeight: FontWeight.bold,
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                "Create Wallet should trigger from notification",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-          ),
-        ],
+            CBBtnOutline(
+              text: "Recover Wallet",
+              onPressed: () async {},
+            )
+          ],
+        ),
       ),
     );
   }

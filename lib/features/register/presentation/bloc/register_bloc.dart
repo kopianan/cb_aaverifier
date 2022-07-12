@@ -11,7 +11,8 @@ part 'register_state.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   String pin = "";
 
-  CBEncryption cbEncryption = CBEncryption();
+  CBEncryptionHelper cbEncryption = CBEncryptionHelper();
+
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
   RegisterBloc() : super(RegisterInitial()) {
     on<MakePin>(
@@ -37,8 +38,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<ActivateBiometry>(
       (event, emit) async {
         emit(SavingHasWithBiometry());
-        await cbEncryption.saveAndEncryptHash(hash: event.hash);
-        emit(OnHashSavedWithBiometry());
+        //Encrypt with biometric
+        try {
+          await cbEncryption.encrptAndSaveHash(hash: event.hash);
+          emit(OnHashSavedWithBiometry());
+        } catch (e) {
+          emit(OnError(e.toString()));
+        }
       },
     );
   }

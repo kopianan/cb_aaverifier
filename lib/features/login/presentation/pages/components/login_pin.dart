@@ -1,4 +1,5 @@
 import 'package:coinbit_verifier/features/global/auth_page_header_widget.dart';
+import 'package:coinbit_verifier/features/home/presentation/bloc/home_bloc.dart';
 import 'package:coinbit_verifier/features/home/presentation/pages/home_page.dart';
 import 'package:coinbit_verifier/features/login/presentation/bloc/login_bloc.dart';
 import 'package:coinbit_verifier/features/register/presentation/widgets/pin_keyboard.dart';
@@ -42,6 +43,8 @@ class _OnBoardingPinState extends State<LoginPin> {
               .showSnackBar(SnackBar(content: Text(state.message)));
         }
         if (state is LoginSuccess) {
+          context.read<HomeBloc>().add(SetHash(state.hash));
+          context.read<HomeBloc>().add((RetreiveEncryptedKeys(state.hash)));
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => const HomePage()));
         }
@@ -120,7 +123,10 @@ class _OnBoardingPinState extends State<LoginPin> {
                     debugPrint('Pin inputted $_inputtedPin');
                     setState(() {});
                   },
-                  onBiometrics: () {},
+                  onBiometrics: () {
+                    //this action will call hardware
+                    context.read<LoginBloc>().add(LoginUsingBiometry());
+                  },
                   onBackspace: () {
                     if (_inputtedPin.isNotEmpty) _inputtedPin.removeLast();
                     setState(() {});

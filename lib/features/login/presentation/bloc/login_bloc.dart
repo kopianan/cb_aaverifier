@@ -10,15 +10,25 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  CBEncryption cbEncryption = CBEncryption();
+  CBEncryptionHelper cbEncryption = CBEncryptionHelper();
   FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   LoginBloc() : super(LoginInitial()) {
+    on<LoginUsingBiometry>(
+      (event, emit) async {
+        try {
+          final hash = await cbEncryption.loadAndDecryptHash();
+
+          emit(LoginSuccess(Uint8List.fromList(hash!.codeUnits)));
+        } catch (e) {
+          emit(LoginFailed('somethingwrong'));
+        }
+      },
+    );
     on<LoginUsingPin>(
       (event, emit) async {
         try {
           final hash = await cbEncryption.getHash(event.pin);
-
           emit(LoginSuccess(hash!));
         } on PlatformException catch (e) {
           emit(LoginFailed(e.message!));

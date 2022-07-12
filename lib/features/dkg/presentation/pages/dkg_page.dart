@@ -1,5 +1,6 @@
 import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
 import 'package:coinbit_verifier/features/dkg/presentation/bloc/dkg_bloc.dart';
+import 'package:coinbit_verifier/features/home/presentation/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,6 +15,7 @@ class _DKGPageState extends State<DKGPage> {
   bool isDkg = false;
   @override
   Widget build(BuildContext context) {
+    final homeBloc = context.read<HomeBloc>();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -21,6 +23,7 @@ class _DKGPageState extends State<DKGPage> {
       ),
       body: BlocListener<DkgBloc, DkgState>(
         listener: (context, state) async {
+          print(state);
           if (state is GeneratingSharedKey) {
             await showDkgDialog(context);
           }
@@ -58,7 +61,12 @@ class _DKGPageState extends State<DKGPage> {
               child: CBBtnPrimary(
                 text: "Create Wallet",
                 onPressed: () async {
-                  context.read<DkgBloc>().add(ProccessDkg(index: 2));
+                  context.read<DkgBloc>().add(
+                        ProccessDkg(
+                          index: 2,
+                          hash: homeBloc.globalHash!,
+                        ),
+                      );
                 },
               ),
             ),

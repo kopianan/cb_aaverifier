@@ -7,3 +7,7 @@ class LoginUsingPin extends LoginEvent {
   final String pin;
   LoginUsingPin(this.pin);
 }
+
+class LoginUsingBiometry extends LoginEvent {
+  LoginUsingBiometry();
+}

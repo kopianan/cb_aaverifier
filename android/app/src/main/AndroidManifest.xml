@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.coinbit_verifier">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    
+      <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+
    <application
         android:label="coinbit_verifier"
         android:name="${applicationName}"

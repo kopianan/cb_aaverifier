@@ -1,8 +1,15 @@
 part of 'home_bloc.dart';
 
-abstract class HomeEvent extends Equatable {
-  const HomeEvent();
+@immutable
+abstract class HomeEvent {}
 
-  @override
-  List<Object> get props => [];
+class SetHash extends HomeEvent {
+  final Uint8List hash;
+  SetHash(this.hash);
+}
+
+///this will retrieve presign and shared key
+class RetreiveEncryptedKeys extends HomeEvent {
+  final Uint8List hash;
+  RetreiveEncryptedKeys(this.hash);
 }

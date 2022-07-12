@@ -1,4 +1,6 @@
 import 'package:coinbit_verifier/features/home/presentation/pages/home_page.dart';
+import 'package:coinbit_verifier/features/login/presentation/pages/components/login_pin.dart';
+import 'package:coinbit_verifier/features/login/presentation/pages/login_page.dart';
 import 'package:coinbit_verifier/features/register/presentation/pages/components/register_pin.dart';
 import 'package:coinbit_verifier/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +27,7 @@ class _SplashPageState extends State<SplashPage> {
         if (state is OnUserExist) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => const HomePage(),
+              builder: (context) => const LoginPin(),
             ),
           );
         }

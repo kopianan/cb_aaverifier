@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:coinbit_verifier/features/global/auth_page_header_widget.dart';
+import 'package:coinbit_verifier/features/home/presentation/bloc/home_bloc.dart';
 import 'package:coinbit_verifier/features/register/presentation/bloc/register_bloc.dart';
 import 'package:coinbit_verifier/features/register/presentation/pages/components/register_biometric.dart';
 import 'package:coinbit_verifier/features/register/presentation/widgets/pin_keyboard.dart';
@@ -60,6 +61,8 @@ class _OnBoardingPinState extends State<RegisterPin> {
         }
         if (state is PinConfrimed) {
           _inputtedPin.clear();
+          //Send hash to HOMEBLOC
+          context.read<HomeBloc>().add(SetHash(state.hash));
           //Save to
           if (Platform.isAndroid) {
             Navigator.of(context).push(MaterialPageRoute(
