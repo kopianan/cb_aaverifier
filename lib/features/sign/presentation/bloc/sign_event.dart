@@ -7,10 +7,10 @@ class CreateSigning extends SignEvent {
   final int index;
   final String payload;
   final String address;
-  
-  CreateSigning({
-    required this.index,
-    required this.payload,
-    required this.address,
-  });
+  final String presign;
+  CreateSigning(
+      {required this.index,
+      required this.payload,
+      required this.address,
+      required this.presign});
 }

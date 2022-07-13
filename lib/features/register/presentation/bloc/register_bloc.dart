@@ -30,6 +30,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           //Generate Hash with pin and generated salt
           //Save
           secureStorage.write(key: "session", value: "exist");
+          
           final hash = await cbEncryption.generateHash(pin);
           emit(PinConfrimed(hash!));
         }

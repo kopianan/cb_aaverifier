@@ -31,7 +31,7 @@ class DkgBloc extends Bloc<DkgEvent, DkgState> {
         final eth = await mpcService.generateAddress(sharedKey.toString());
         //save has for generating tag
         await storage.write(key: 'address', value: eth.hex);
-        final tag = "presignkey-${eth.hex}";
+        final tag = "sharedKey-${eth.hex}";
         log(eth.hex, name: "HEX");
         log(tag, name: "Tag");
         //Save with package
@@ -51,7 +51,8 @@ class DkgBloc extends Bloc<DkgEvent, DkgState> {
 
         final presignKey =
             await cbRustMpc.offlineSignWithJson(event.index, _shared!);
-        final tag = "sharedkey-${event.address}";
+
+        final tag = "presignKey-${event.address}";
 
         Uint8List encryptedKey = await cbEncryption.encryptAndSaveKey(
           event.hash,

@@ -25,21 +25,12 @@ class _SplashPageState extends State<SplashPage> {
     return BlocConsumer<SplashBloc, SplashState>(
       listener: (context, state) {
         if (state is OnUserExist) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const LoginPin(),
-            ),
-          );
+          Navigator.of(context).pushReplacementNamed('/login_page');
         }
 
         if (state is OnUserNotExist) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const RegisterPin(
-                type: PinPageType.newPin,
-              ),
-            ),
-          );
+          Navigator.of(context).pushReplacementNamed('/register_page',
+              arguments: ['', PinPageType.newPin]);
         }
       },
       builder: (context, state) {

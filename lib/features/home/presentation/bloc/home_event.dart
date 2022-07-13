@@ -13,3 +13,7 @@ class RetreiveEncryptedKeys extends HomeEvent {
   final Uint8List hash;
   RetreiveEncryptedKeys(this.hash);
 }
+
+class GetAndDecryptPresign extends HomeEvent {
+  GetAndDecryptPresign();
+}

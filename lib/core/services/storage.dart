@@ -19,16 +19,6 @@ class Storage {
     }
   }
 
-  static Future<String?> loadPresignKey(String key) async {
-    final result = await _storage.read(key: "${key}pk");
-    return result;
-  }
-
-  static Future<String?> loadSharedKey(String key) async {
-    final result = await _storage.read(key: "${key}sk");
-    return result;
-  }
-
   static Future<Map<String, String>> loadAllKey() async {
     final result = await _storage.readAll();
     return result;

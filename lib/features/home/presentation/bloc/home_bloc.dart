@@ -28,8 +28,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (event, emit) async {
         final address = await storage.read(key: 'address');
         print(address);
-        final presignTag = "presignkey-$address";
-        final sharedTag = "sharedkey-$address";
+        final presignTag = "presignKey-$address";
+        final sharedTag = "sharedKey-$address";
         log(presignTag, name: "Presign Tag");
         log(sharedTag, name: "Shared Tag");
         final encryptedPresign =
@@ -40,6 +40,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         globalEncryptedSharedKey = encryptedKeyshared;
         globalEncryptedPresignKey = encryptedPresign;
+      },
+    );
+
+    on<GetAndDecryptPresign>(
+      (event, emit) async {
+        final address = await storage.read(key: 'address');
+        final presignTag = "presignKey-$address";
+        final presign = await cbEncryptionHelper.decryptKeyWithHardware(
+            globalEncryptedPresignKey!, presignTag);
+        emit(OnGetDecryptedPresign(presign));
       },
     );
   }

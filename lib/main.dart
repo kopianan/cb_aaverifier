@@ -8,6 +8,7 @@ import 'package:coinbit_verifier/features/home/presentation/pages/home_page.dart
 import 'package:coinbit_verifier/features/login/presentation/bloc/login_bloc.dart';
 import 'package:coinbit_verifier/features/login/presentation/pages/components/login_pin.dart';
 import 'package:coinbit_verifier/features/register/presentation/bloc/register_bloc.dart';
+import 'package:coinbit_verifier/features/register/presentation/pages/components/register_biometric.dart';
 import 'package:coinbit_verifier/features/register/presentation/pages/components/register_pin.dart';
 import 'package:coinbit_verifier/features/sign/presentation/bloc/sign_bloc.dart';
 import 'package:coinbit_verifier/features/sign/presentation/pages/sign_page.dart';
@@ -20,6 +21,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rust_mpc_ffi/lib.dart';
+
+import 'features/dkg/presentation/pages/success_dkg_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -72,14 +75,14 @@ class _MyAppState extends State<MyApp> {
         builder: () => MaterialApp(
           title: 'Flutter Demo',
           routes: {
+            "/success_dkg": (_) => const SuccessDkgPage(),
             "/dkg_page": (_) => const DKGPage(),
             "/splash_page": (_) => const SplashPage(),
             "/sign_page": (_) => const SignPage(),
             "/home_page": (_) => const HomePage(),
             "/login_page": (_) => const LoginPin(),
-            "/register_page": (_) => const RegisterPin(
-                  type: PinPageType.newPin,
-                ),
+            "/register_page": (_) => const RegisterPin(),
+            "/register_biometry": (_) => const RegisterBiometric(),
           },
           theme: ThemeData(
             appBarTheme: AppBarTheme(

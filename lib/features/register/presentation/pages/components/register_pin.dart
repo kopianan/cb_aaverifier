@@ -11,14 +11,11 @@ import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum PinPageType { newPin, confimPin, successPin, erroPin }
+// final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
 
 class RegisterPin extends StatefulWidget {
-  final PinPageType type;
-  final String? previousePin;
   const RegisterPin({
     Key? key,
-    required this.type,
-    this.previousePin,
   }) : super(key: key);
   @override
   State<RegisterPin> createState() => _OnBoardingPinState();
@@ -26,6 +23,9 @@ class RegisterPin extends StatefulWidget {
 
 class _OnBoardingPinState extends State<RegisterPin> {
   final List<int> _inputtedPin = [];
+
+  PinPageType? type;
+  String? previousePin;
 
   Future<bool> checkAuthenticationPin(List<int> currentPin) async {
     String _pin = '';
@@ -38,21 +38,22 @@ class _OnBoardingPinState extends State<RegisterPin> {
 
   @override
   void initState() {
-    if (widget.previousePin != null) {
-      log(widget.previousePin!.toString(), name: "NEW PIN");
+    if (previousePin != null) {
+      log(previousePin!.toString(), name: "NEW PIN");
     }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as dynamic;
+    previousePin = args[0] as String;
+    type = args[1] as PinPageType;
     return BlocConsumer<RegisterBloc, RegisterState>(
       listener: (context, state) {
-        print(state);
         if (state is OnPinMade) {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const RegisterPin(
-                  previousePin: '', type: PinPageType.confimPin)));
+          Navigator.of(context).pushNamed('/register_page',
+              arguments: ['', PinPageType.confimPin]);
         }
         if (state is WrongPin) {
           _inputtedPin.clear();
@@ -65,17 +66,15 @@ class _OnBoardingPinState extends State<RegisterPin> {
           context.read<HomeBloc>().add(SetHash(state.hash));
           //Save to
           if (Platform.isAndroid) {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => RegisterBiometric(
-                      type: BiometricType.finger,
-                      hash: state.hash,
-                    )));
+            Navigator.of(context).pushReplacementNamed(
+              '/register_biometry',
+              arguments: [state.hash, BiometricType.finger],
+            );
           } else {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => RegisterBiometric(
-                      type: BiometricType.faceid,
-                      hash: state.hash,
-                    )));
+            Navigator.of(context).pushReplacementNamed(
+              '/register_biometry',
+              arguments: [state.hash, BiometricType.faceid],
+            );
           }
 
           ScaffoldMessenger.of(context)
@@ -94,7 +93,7 @@ class _OnBoardingPinState extends State<RegisterPin> {
                 Column(
                   children: [
                     AuthPageHeaderWidget(
-                      title: (widget.type == PinPageType.newPin)
+                      title: (type == PinPageType.newPin)
                           ? "Buat 6 Digit\nPIN Kamu"
                           : "Konfirmasi 6 digit\nPIN Kamu",
                       icon: Icons.lock,
@@ -153,7 +152,7 @@ class _OnBoardingPinState extends State<RegisterPin> {
                       for (var element in _inputtedPin) {
                         pin += element.toString();
                       }
-                      if (widget.type == PinPageType.newPin) {
+                      if (type == PinPageType.newPin) {
                         context.read<RegisterBloc>().add(MakePin(pin));
                         // return RegisterPin(
                         //   type: PinPageType.confimPin,

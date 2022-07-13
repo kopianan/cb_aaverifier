@@ -28,7 +28,9 @@ class _DKGPageState extends State<DKGPage> {
             await showDkgDialog(context);
           }
           if (state is OnPresignKeyGenerated) {
-            Navigator.of(context).popUntil(ModalRoute.withName('/home_page'));
+            //setup data to global state
+            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/success_dkg');
           }
         },
         child: Column(

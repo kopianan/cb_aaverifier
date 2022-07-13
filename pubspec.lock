@@ -569,7 +569,7 @@ packages:
       name: pinenacl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.4"
+    version: "0.5.0"
   pinput:
     dependency: "direct main"
     description:
@@ -750,11 +750,9 @@ packages:
   test_encrypt:
     dependency: "direct main"
     description:
-      path: "."
-      ref: anandev
-      resolved-ref: bcbf7a865b13376cdfef8b69ba08076a73a28eef
-      url: "https://github.com/lustea00/test_encrypt"
-    source: git
+      path: "/Users/anan/test_encrypt"
+      relative: false
+    source: path
     version: "0.0.1"
   typed_data:
     dependency: transitive

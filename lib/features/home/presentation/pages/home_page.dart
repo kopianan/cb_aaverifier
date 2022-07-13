@@ -54,13 +54,14 @@ class _HomePageState extends State<HomePage> {
         NotificationService.createDkgNotificationBanner(message.data);
       }
       if (message.data['topics'] == 'offlinesign') {
-        context.read<DkgBloc>().add(
-              ProccessPresign(
-                index: 2,
-                address: message.data['address'],
-                hash: context.read<HomeBloc>().globalHash!,
-              ),
-            );
+        Future.delayed(Duration(seconds: 3))
+            .then((value) => context.read<DkgBloc>().add(
+                  ProccessPresign(
+                    index: 2,
+                    address: message.data['address'],
+                    hash: context.read<HomeBloc>().globalHash!,
+                  ),
+                ));
       }
       if (message.data['topics'] == 'sign') {
         NotificationService.createSignNotificationBanner(message.data);

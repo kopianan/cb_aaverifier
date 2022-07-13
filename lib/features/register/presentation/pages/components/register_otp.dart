@@ -50,10 +50,8 @@ class _RegisterOtpState extends State<RegisterOtp> {
                             message: "Berhasil yeay",
                             snackbarColor: CBColorType.success,
                           ).show(context);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const RegisterPin(
-                                    type: PinPageType.newPin,
-                                  )));
+                          Navigator.of(context).pushNamed('/register_page',
+                              arguments: ['', PinPageType.newPin]);
                         },
                         defaultPinTheme: PinTheme(
                             width: 65,
@@ -96,13 +94,8 @@ class _RegisterOtpState extends State<RegisterOtp> {
                       CBBtnPrimary(
                         text: "Lanjutkan",
                         onPressed: () async {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const RegisterPin(
-                                type: PinPageType.newPin,
-                              ),
-                            ),
-                          );
+                          Navigator.of(context).pushNamed('/register_page',
+                              arguments: ['', PinPageType.newPin]);
                         },
                       ),
                     ],

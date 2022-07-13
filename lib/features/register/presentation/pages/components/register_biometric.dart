@@ -10,24 +10,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 enum BiometricType { finger, faceid }
 
 class RegisterBiometric extends StatefulWidget {
-  const RegisterBiometric({Key? key, required this.type, this.hash})
-      : super(key: key);
-  final Uint8List? hash;
-  final BiometricType type;
+  const RegisterBiometric({Key? key}) : super(key: key);
 
   @override
   State<RegisterBiometric> createState() => _RegisterBiometricState();
 }
 
 class _RegisterBiometricState extends State<RegisterBiometric> {
+  Uint8List? hash;
+  BiometricType? type;
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as dynamic;
+    hash = args[0] as Uint8List;
+    type = args[1] as BiometricType;
     return BlocConsumer<RegisterBloc, RegisterState>(
       listener: (context, state) {
         print(state);
         if (state is OnHashSavedWithBiometry) {
           log("Hash Saved", name: "HASH");
-          Navigator.of(context).pushNamed('/home_page');
+          Navigator.of(context).pushReplacementNamed('/home_page');
         }
       },
       builder: (context, state) {
@@ -40,7 +42,7 @@ class _RegisterBiometricState extends State<RegisterBiometric> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const SizedBox(),
-                (widget.type == BiometricType.faceid)
+                (type == BiometricType.faceid)
                     ? const AuthPageHeaderWidget(
                         image: CustomIcon.icFaceId,
                         title: "Atur Face ID",
@@ -61,7 +63,7 @@ class _RegisterBiometricState extends State<RegisterBiometric> {
                       onPressed: () async {
                         context
                             .read<RegisterBloc>()
-                            .add(ActivateBiometry(widget.hash!));
+                            .add(ActivateBiometry(hash!));
                       },
                     ),
                     const SizedBox(height: 32),

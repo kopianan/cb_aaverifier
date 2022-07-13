@@ -1,11 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:rust_mpc_ffi/lib.dart';
-
-import '../../../../core/services/storage.dart';
+import 'package:convert/convert.dart';
 
 part 'sign_event.dart';
 part 'sign_state.dart';
@@ -15,16 +13,13 @@ class SignBloc extends Bloc<SignEvent, SignState> {
   SignBloc() : super(SignInitial()) {
     on<CreateSigning>(
       (event, emit) async {
-        emit(Signing());
-        var presignKey = await Storage.loadPresignKey(event.address);
-        print("Presign here");
+        emit(Signing()); 
 
         var sign = await cbRustMpc.sign(
           event.index,
-          presignKey!,
-          Uint8List.fromList(event.payload.codeUnits),
+          event.presign,
+          Uint8List.fromList(hex.decode(event.payload)),
         );
-        print("Sign ");
         emit(OnSigningComplete(sign));
       },
     );

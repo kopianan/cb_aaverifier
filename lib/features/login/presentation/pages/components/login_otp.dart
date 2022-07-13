@@ -51,10 +51,8 @@ class _LoginOtpState extends State<LoginOtp> {
                             message: "Berhasil yeay",
                             snackbarColor: CBColorType.success,
                           ).show(context);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const RegisterPin(
-                                    type: PinPageType.newPin,
-                                  )));
+                          Navigator.of(context).pushNamed('/register_page',
+                              arguments: ['', PinPageType.newPin]);
                         },
                         defaultPinTheme: PinTheme(
                             width: 65,

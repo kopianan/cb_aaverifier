@@ -1,9 +1,11 @@
 part of 'home_bloc.dart';
 
-abstract class HomeState extends Equatable {
-  const HomeState();  
+@immutable
+abstract class HomeState {}
 
-  @override
-  List<Object> get props => [];
-}
 class HomeInitial extends HomeState {}
+
+class OnGetDecryptedPresign extends HomeState {
+  final String presign;
+  OnGetDecryptedPresign(this.presign);
+}
