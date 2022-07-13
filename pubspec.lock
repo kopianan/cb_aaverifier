@@ -332,7 +332,7 @@ packages:
     description:
       path: "."
       ref: "feature/biometric"
-      resolved-ref: "32d259a6426a17e48efbc341011314886cd9cb28"
+      resolved-ref: b19e14d4e3882997fc875793112b0038e92dfa40
       url: "https://github.com/mazidahmad/flutter_keystore.git"
     source: git
     version: "0.0.1"
@@ -500,20 +500,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  local_auth_android:
-    dependency: transitive
-    description:
-      name: local_auth_android
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.5"
-  local_auth_platform_interface:
-    dependency: transitive
-    description:
-      name: local_auth_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.4"
   logging:
     dependency: transitive
     description:
@@ -569,7 +555,7 @@ packages:
       name: pinenacl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0"
+    version: "0.5.1"
   pinput:
     dependency: "direct main"
     description:
@@ -750,9 +736,11 @@ packages:
   test_encrypt:
     dependency: "direct main"
     description:
-      path: "/Users/anan/test_encrypt"
-      relative: false
-    source: path
+      path: "."
+      ref: anandev
+      resolved-ref: "462d1e44ebd24efc784c69124af2eb258f8b6de9"
+      url: "https://github.com/lustea00/test_encrypt"
+    source: git
     version: "0.0.1"
   typed_data:
     dependency: transitive

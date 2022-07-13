@@ -43,13 +43,13 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_secure_storage: ^5.0.2
   pointycastle: ^3.6.0
-  test_encrypt: 
-    path: /Users/anan/test_encrypt
-      
   # test_encrypt: 
-  #   git: 
-  #     url: https://github.com/lustea00/test_encrypt
-  #     ref: anandev
+  #   path: /Users/anan/test_encrypt
+      
+  test_encrypt: 
+    git: 
+      url: https://github.com/lustea00/test_encrypt
+      ref: anandev
   coinbit_ui_mobile:
     git:
       url: https://gitlab.com/coinbitid/coinbit_ui_mobile.git
