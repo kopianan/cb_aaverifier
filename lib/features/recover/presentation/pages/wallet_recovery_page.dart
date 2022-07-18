@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
 import 'package:coinbit_verifier/features/recover/presentation/bloc/recover_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -12,6 +15,7 @@ class WalletRecoveryPage extends StatefulWidget {
 }
 
 class _WalletRecoveryPageState extends State<WalletRecoveryPage> {
+  final hashController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final bloc = context.read<RecoverBloc>();
@@ -19,16 +23,53 @@ class _WalletRecoveryPageState extends State<WalletRecoveryPage> {
       appBar: AppBar(
         title: Text("Recover Wallet"),
       ),
-      body: Column(children: [
-        ListTile(
-          leading: Icon(Icons.add_to_drive_sharp),
-          title: Text("Get From Google Drive"),
-          onTap: () {
-            String hardCodeFileId = '1eK4rW27vhccMW36nNZlT-cyKEgLofxmx';
-            bloc.add(GetEncryptedKeyFromStorage(hardCodeFileId));
-          },
-        )
-      ]),
+      body: BlocListener<RecoverBloc, RecoverState>(
+        bloc: bloc,
+        listener: (context, state) {
+          print(state);
+          if (state is OnDownlodKeySuccess) {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  child: Column(children: [
+                    TextFormField(
+                      controller: hashController,
+                      decoration: InputDecoration(
+                        labelText: "Input hash",
+                      ),
+                    ),
+                    CBBtnPrimary(
+                      text: "Decrypt And Save",
+                      onPressed: () async {
+                        final text = hashController.text;
+                        final test =
+                            text.replaceAll('[', '').replaceAll(']', '');
+                        final listString = test.split(',');
+                        final listInt =
+                            listString.map((e) => int.parse(e)).toList();
+
+                        final uint = Uint8List.fromList(listInt);
+                        bloc.add(DecryptKey(state.encryptedKey, uint));
+                      },
+                    )
+                  ]),
+                );
+              },
+            );
+          }
+        },
+        child: Column(children: [
+          ListTile(
+            leading: Icon(Icons.add_to_drive_sharp),
+            title: Text("Get From Google Drive"),
+            onTap: () {
+              String hardCodeFileId = '1BIKNyQGyZ6cgPuWf7m3p2Dxi2Di_i_jM';
+              bloc.add(GetEncryptedKeyFromStorage(hardCodeFileId));
+            },
+          )
+        ]),
+      ),
     );
   }
 }

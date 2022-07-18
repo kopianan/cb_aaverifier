@@ -31,9 +31,11 @@ dependencies:
   awesome_notifications: ^0.6.21
   bloc: ^8.0.3
   camera: ^0.9.4+21
-  clipboard: ^0.1.3
+  clipboard: ^0.1.3 
   cloud_storage:
-    path: /Users/anan/Documents/References/cloud_storage
+    git:
+      url:  https://github.com/kopianan/cb_cloud_storage.git
+      ref: main
   coinbit_ui_mobile:
     git:
       url: https://gitlab.com/coinbitid/coinbit_ui_mobile.git
@@ -58,8 +60,11 @@ dependencies:
     git:
       url: https://github.com/kopianan/rust_mpc_ffi
       ref: master
-  test_encrypt:
-    path: /Users/anan/test_encrypt
+  test_encrypt: 
+    git: 
+      url: https://github.com/lustea00/test_encrypt
+      ref: anandev
+
   web3dart: ^2.3.5
 
 dev_dependencies:

@@ -165,9 +165,11 @@ packages:
   cloud_storage:
     dependency: "direct main"
     description:
-      path: "/Users/anan/Documents/References/cloud_storage"
-      relative: false
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: f1029229131f0c9266a7c23561245780fe585c1e
+      url: "https://github.com/kopianan/cb_cloud_storage.git"
+    source: git
     version: "0.0.1"
   code_builder:
     dependency: transitive
@@ -367,7 +369,7 @@ packages:
     description:
       path: "."
       ref: "feature/biometric"
-      resolved-ref: "15a3f5d2a00adc19ccbc726743e9046b7fa0253f"
+      resolved-ref: "190c15f105217be846c927fa279a51db188080d3"
       url: "https://github.com/mazidahmad/flutter_keystore.git"
     source: git
     version: "0.0.1"
@@ -869,9 +871,11 @@ packages:
   test_encrypt:
     dependency: "direct main"
     description:
-      path: "/Users/anan/test_encrypt"
-      relative: false
-    source: path
+      path: "."
+      ref: anandev
+      resolved-ref: db0b7c3ad7c811312fa0e96241122d9d6cbcf07a
+      url: "https://github.com/lustea00/test_encrypt"
+    source: git
     version: "0.0.1"
   typed_data:
     dependency: transitive
