@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:853356807631:android:b778e625d9c05ea91c7eba",
+        "mobilesdk_app_id": "1:853356807631:android:58d6b6f7900ca8f91c7eba",
         "android_client_info": {
-          "package_name": "com.example.coinbit_verifier"
+          "package_name": "com.example.coinbit_as_a_server"
         }
       },
       "oauth_client": [
@@ -31,10 +31,90 @@
               "client_type": 3
             },
             {
-              "client_id": "853356807631-jpfqgob2eshgrmj8jvhmnq2pm14rih78.apps.googleusercontent.com",
+              "client_id": "853356807631-8linmkpb04ddsctm5mh1jdhmo8hh6qrs.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.coinbitVerifier"
+                "bundle_id": "com.example.demoWeb3dartMpc"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853356807631:android:b778e625d9c05ea91c7eba",
+        "android_client_info": {
+          "package_name": "com.example.coinbit_verifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853356807631-e2unpg4m3uolsreajikcn05uk17v7aj5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.coinbit_verifier",
+            "certificate_hash": "06c70b26b623bab79454408fee7768440cda44a9"
+          }
+        },
+        {
+          "client_id": "853356807631-3cdfpiot8mgveac7dcia35j2hntoqtqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa7_9Fc6ZKH0prNloqTIf4jsuNJI755G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853356807631-3cdfpiot8mgveac7dcia35j2hntoqtqd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "853356807631-8linmkpb04ddsctm5mh1jdhmo8hh6qrs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.demoWeb3dartMpc"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853356807631:android:2d44d457a2ed65be1c7eba",
+        "android_client_info": {
+          "package_name": "com.example.demo_web3dart_mpc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853356807631-3cdfpiot8mgveac7dcia35j2hntoqtqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa7_9Fc6ZKH0prNloqTIf4jsuNJI755G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853356807631-3cdfpiot8mgveac7dcia35j2hntoqtqd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "853356807631-8linmkpb04ddsctm5mh1jdhmo8hh6qrs.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.demoWeb3dartMpc"
               }
             }
           ]

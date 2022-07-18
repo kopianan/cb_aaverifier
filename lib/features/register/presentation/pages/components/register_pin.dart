@@ -66,8 +66,9 @@ class _OnBoardingPinState extends State<RegisterPin> {
           context.read<HomeBloc>().add(SetHash(state.hash));
           //Save to
           if (Platform.isAndroid) {
-            Navigator.of(context).pushReplacementNamed(
+            Navigator.of(context).pushNamedAndRemoveUntil(
               '/register_biometry',
+              ModalRoute.withName('/splash_page'),
               arguments: [state.hash, BiometricType.finger],
             );
           } else {

@@ -17,3 +17,5 @@ class RetreiveEncryptedKeys extends HomeEvent {
 class GetAndDecryptPresign extends HomeEvent {
   GetAndDecryptPresign();
 }
+
+class WatchWalletExisting extends HomeEvent {}

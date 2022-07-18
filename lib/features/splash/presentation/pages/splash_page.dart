@@ -29,7 +29,7 @@ class _SplashPageState extends State<SplashPage> {
         }
 
         if (state is OnUserNotExist) {
-          Navigator.of(context).pushReplacementNamed('/register_page',
+          Navigator.of(context).pushReplacementNamed('/onboard_page',
               arguments: ['', PinPageType.newPin]);
         }
       },

@@ -12,31 +12,35 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Uint8List? globalHash;
-  String? globalEncryptedSharedKey;
-  String? globalEncryptedPresignKey;
-
+  Uint8List? globalEncryptedSharedKey;
+  Uint8List? globalEncryptedPresignKey;
+  String? address;
   CBEncryptionHelper cbEncryptionHelper = CBEncryptionHelper();
   final storage = FlutterSecureStorage();
 
   HomeBloc() : super(HomeInitial()) {
     on<SetHash>(
-      (event, emit) async {
+      (event, emit) {
         globalHash = event.hash;
       },
     );
     on<RetreiveEncryptedKeys>(
       (event, emit) async {
-        final address = await storage.read(key: 'address');
-        print(address);
+        address = await storage.read(key: 'address');
         final presignTag = "presignKey-$address";
         final sharedTag = "sharedKey-$address";
-        log(presignTag, name: "Presign Tag");
-        log(sharedTag, name: "Shared Tag");
-        final encryptedPresign =
-            await cbEncryptionHelper.loadEncryptedKey(event.hash, presignTag);
-        log(encryptedPresign, name: "ENCRYPTED PRESIGN");
-        final encryptedKeyshared =
-            await cbEncryptionHelper.loadEncryptedKey(event.hash, sharedTag);
+
+        final encryptedPresign = await cbEncryptionHelper.loadEncryptedKey(
+          event.hash,
+          presignTag,
+        );
+        final encryptedKeyshared = await cbEncryptionHelper.loadEncryptedKey(
+          event.hash,
+          sharedTag,
+        );
+
+        print(encryptedKeyshared);
+        print(encryptedPresign);
 
         globalEncryptedSharedKey = encryptedKeyshared;
         globalEncryptedPresignKey = encryptedPresign;
@@ -50,6 +54,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         final presign = await cbEncryptionHelper.decryptKeyWithHardware(
             globalEncryptedPresignKey!, presignTag);
         emit(OnGetDecryptedPresign(presign));
+      },
+    );
+    on<WatchWalletExisting>(
+      (event, emit) async {
+        address = await storage.read(key: 'address');
       },
     );
   }

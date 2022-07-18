@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
+import 'package:coinbit_verifier/core/services/fcm_service.dart';
 import 'package:coinbit_verifier/core/services/notifications_service.dart';
 
 import 'package:coinbit_verifier/features/dkg/presentation/bloc/dkg_bloc.dart';
@@ -25,11 +26,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    super.initState();
-
-    log(context.read<HomeBloc>().globalEncryptedSharedKey.toString(),
-        name: "GLOBAL HASH");
-
     FirebaseMessaging.instance.getInitialMessage();
 
     NotificationService.checkPermission(context).then((value) {
@@ -50,6 +46,7 @@ class _HomePageState extends State<HomePage> {
       (RemoteMessage message) {},
     );
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(message);
       if (message.data['topics'] == 'dkg') {
         NotificationService.createDkgNotificationBanner(message.data);
       }
@@ -67,17 +64,29 @@ class _HomePageState extends State<HomePage> {
         NotificationService.createSignNotificationBanner(message.data);
       }
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final homeBloc = context.watch<HomeBloc>();
+    log(homeBloc.address.toString(), name: "Home Address");
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.of(context).pushNamed('/dkg_page');
-      }),
       appBar: AppBar(
         centerTitle: true,
         title: const Text("VERIFIER"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/setting_page');
+              },
+              icon: const Icon(Icons.settings)),
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/notification_page');
+              },
+              icon: const Icon(Icons.notifications))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -87,19 +96,25 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: Text(
-                "Create Wallet should trigger from notification",
+                (homeBloc.address != null)
+                    ? "This is your wallet"
+                    : "Create Wallet should trigger from notification",
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            CBBtnOutline(
-              text: "Recover Wallet",
-              onPressed: () async {},
-            )
+            Visibility(
+                visible: (homeBloc.address == null) ? true : false,
+                child: CBBtnOutline(
+                  text: "Recover Wallet",
+                  onPressed: () async {
+                    Navigator.of(context).pushNamed('/wallet_recovery_page');
+                  },
+                ))
           ],
         ),
       ),

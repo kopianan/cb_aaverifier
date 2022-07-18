@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
@@ -18,8 +19,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       (event, emit) async {
         try {
           final hash = await cbEncryption.loadAndDecryptHash();
-
-          emit(LoginSuccess(Uint8List.fromList(hash!.codeUnits)));
+          emit(LoginSuccess(hash!));
         } catch (e) {
           emit(LoginFailed('somethingwrong'));
         }
@@ -29,6 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       (event, emit) async {
         try {
           final hash = await cbEncryption.getHash(event.pin);
+
           emit(LoginSuccess(hash!));
         } on PlatformException catch (e) {
           emit(LoginFailed(e.message!));

@@ -27,37 +27,39 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  auto_route: ^4.0.0
   awesome_notifications: ^0.6.21
   bloc: ^8.0.3
-  cupertino_icons: ^1.0.2
-  equatable: ^2.0.3
-  firebase_core: ^1.18.0
   camera: ^0.9.4+21
-  pinput: ^2.2.7
-  get_it: ^7.2.0
-  auto_route: ^4.0.0 
-  dio: ^4.0.6
-  firebase_messaging: ^11.4.2
-  flutter:
-    sdk: flutter
-  flutter_bloc: ^8.0.1
-  flutter_secure_storage: ^5.0.2
-  pointycastle: ^3.6.0
-  # test_encrypt: 
-  #   path: /Users/anan/test_encrypt
-      
-  test_encrypt: 
-    git: 
-      url: https://github.com/lustea00/test_encrypt
-      ref: anandev
+  clipboard: ^0.1.3
+  cloud_storage:
+    path: /Users/anan/Documents/References/cloud_storage
   coinbit_ui_mobile:
     git:
       url: https://gitlab.com/coinbitid/coinbit_ui_mobile.git
       ref: dev
+  cupertino_icons: ^1.0.2
+  dartz: ^0.10.1
+  dio: ^4.0.6
+  equatable: ^2.0.3
+  extension_google_sign_in_as_googleapis_auth: ^2.0.5
+  firebase_core: ^1.19.2
+  firebase_messaging: ^12.0.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.0.1
+  flutter_secure_storage: ^5.0.2
+  google_sign_in: ^5.4.0
+  googleapis: ^9.1.0
+  path_provider: ^2.0.11
+  pinput: ^2.2.7
+  pointycastle: ^3.6.0
   rust_mpc_ffi:
     git:
       url: https://github.com/kopianan/rust_mpc_ffi
       ref: master
+  test_encrypt:
+    path: /Users/anan/test_encrypt
   web3dart: ^2.3.5
 
 dev_dependencies:

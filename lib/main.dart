@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
 import 'package:coinbit_verifier/core/services/fcm_service.dart';
 import 'package:coinbit_verifier/core/services/notifications_service.dart';
@@ -7,9 +6,13 @@ import 'package:coinbit_verifier/features/home/presentation/bloc/home_bloc.dart'
 import 'package:coinbit_verifier/features/home/presentation/pages/home_page.dart';
 import 'package:coinbit_verifier/features/login/presentation/bloc/login_bloc.dart';
 import 'package:coinbit_verifier/features/login/presentation/pages/components/login_pin.dart';
+import 'package:coinbit_verifier/features/notification/presentation/pages/notification_page.dart';
+import 'package:coinbit_verifier/features/recover/presentation/bloc/recover_bloc.dart';
+import 'package:coinbit_verifier/features/recover/presentation/pages/wallet_recovery_page.dart';
 import 'package:coinbit_verifier/features/register/presentation/bloc/register_bloc.dart';
 import 'package:coinbit_verifier/features/register/presentation/pages/components/register_biometric.dart';
 import 'package:coinbit_verifier/features/register/presentation/pages/components/register_pin.dart';
+import 'package:coinbit_verifier/features/setting/presentation/bloc/setting_bloc.dart';
 import 'package:coinbit_verifier/features/sign/presentation/bloc/sign_bloc.dart';
 import 'package:coinbit_verifier/features/sign/presentation/pages/sign_page.dart';
 import 'package:coinbit_verifier/features/dkg/presentation/pages/dkg_page.dart';
@@ -23,15 +26,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rust_mpc_ffi/lib.dart';
 
 import 'features/dkg/presentation/pages/success_dkg_page.dart';
+import 'features/onboard/presentation/pages/onboard_page.dart';
+import 'features/setting/presentation/pages/setting_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  NotificationService.initializeAwesomeNotification();
 
+  await NotificationService.initializeAwesomeNotification();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
   FCMService.subscribeFCM();
+
   CBRustMpc().setup();
   runApp(const MyApp());
 }
@@ -70,6 +75,12 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) => SignBloc(),
         ),
+        BlocProvider(
+          create: (context) => RecoverBloc(),
+        ),
+        BlocProvider(
+          create: (context) => SettingBloc(),
+        ),
       ],
       child: CBComponentInit(
         builder: () => MaterialApp(
@@ -80,12 +91,16 @@ class _MyAppState extends State<MyApp> {
             "/splash_page": (_) => const SplashPage(),
             "/sign_page": (_) => const SignPage(),
             "/home_page": (_) => const HomePage(),
+            "/onboard_page": (_) => const OnBoardPage(),
+            "/setting_page": (_) => const SettingPage(),
             "/login_page": (_) => const LoginPin(),
             "/register_page": (_) => const RegisterPin(),
             "/register_biometry": (_) => const RegisterBiometric(),
+            "/wallet_recovery_page": (_) => const WalletRecoveryPage(),
+            "/notification_page": (_) => const NotificationPage(),
           },
           theme: ThemeData(
-            appBarTheme: AppBarTheme(
+            appBarTheme: const AppBarTheme(
                 centerTitle: true,
                 foregroundColor: Colors.black,
                 backgroundColor: Colors.transparent,

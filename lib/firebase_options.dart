@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +43,16 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCWQ_6yvO-IrTtU5lBIwGNjGTWrTADqHmQ',
+    appId: '1:853356807631:web:f26ab0bde7fab3c01c7eba',
+    messagingSenderId: '853356807631',
+    projectId: 'fluttermpc',
+    authDomain: 'fluttermpc.firebaseapp.com',
+    storageBucket: 'fluttermpc.appspot.com',
+    measurementId: 'G-R1CSEC0DG3',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBa7_9Fc6ZKH0prNloqTIf4jsuNJI755G0',
     appId: '1:853356807631:android:b778e625d9c05ea91c7eba',
@@ -63,6 +67,18 @@ class DefaultFirebaseOptions {
     messagingSenderId: '853356807631',
     projectId: 'fluttermpc',
     storageBucket: 'fluttermpc.appspot.com',
+    androidClientId: '853356807631-e2unpg4m3uolsreajikcn05uk17v7aj5.apps.googleusercontent.com',
+    iosClientId: '853356807631-jpfqgob2eshgrmj8jvhmnq2pm14rih78.apps.googleusercontent.com',
+    iosBundleId: 'com.example.coinbitVerifier',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBOVE-kys72ICmAVgZQI4X6ZCdUklzwd10',
+    appId: '1:853356807631:ios:f97e7a7f6269f1821c7eba',
+    messagingSenderId: '853356807631',
+    projectId: 'fluttermpc',
+    storageBucket: 'fluttermpc.appspot.com',
+    androidClientId: '853356807631-e2unpg4m3uolsreajikcn05uk17v7aj5.apps.googleusercontent.com',
     iosClientId: '853356807631-jpfqgob2eshgrmj8jvhmnq2pm14rih78.apps.googleusercontent.com',
     iosBundleId: 'com.example.coinbitVerifier',
   );
