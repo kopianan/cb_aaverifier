@@ -1,30 +1,74 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Storage {
-  static const _storage = FlutterSecureStorage();
+  static final Storage _singleton = Storage._internal();
 
-  static Future<void> saveSharedKey(String key, String value) async {
+  factory Storage() {
+    return _singleton;
+  }
+
+  Storage._internal();
+
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+
+  IOSOptions _getIOSOptions() => const IOSOptions();
+
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+        encryptedSharedPreferences: true,
+      );
+
+  String session = 'session';
+  String address = 'address';
+
+  Future<void> saveSession() async {
     try {
-      await _storage.write(key: "${key}sk", value: value);
-    } catch (e) {
-      throw Exception();
+      await _storage.write(
+        key: session,
+        value: 'cb session',
+        iOptions: _getIOSOptions(),
+        aOptions: _getAndroidOptions(),
+      );
+    } on Exception catch (e) {
+      throw Exception(e);
     }
   }
 
-  static Future<void> savePresignKey(String key, String value) async {
+  Future<String?> getSession() async {
     try {
-      await _storage.write(key: '${key}pk', value: value);
-    } catch (e) {
-      throw Exception();
+      final result = await _storage.read(
+        key: session,
+        iOptions: _getIOSOptions(),
+        aOptions: _getAndroidOptions(),
+      );
+      return result;
+    } on Exception catch (e) {
+      throw Exception("No Salt Found");
     }
   }
 
-  static Future<Map<String, String>> loadAllKey() async {
-    final result = await _storage.readAll();
-    return result;
+  Future<void> saveAddress(String cbAddress) async {
+    try {
+      await _storage.write(
+        key: address,
+        value: cbAddress,
+        iOptions: _getIOSOptions(),
+        aOptions: _getAndroidOptions(),
+      );
+    } on Exception catch (e) {
+      throw Exception(e);
+    }
   }
 
-  static Future<void> clear() async {
-    await _storage.deleteAll();
+  Future<String?> getAddress() async {
+    try {
+      final result = await _storage.read(
+        key: address,
+        iOptions: _getIOSOptions(),
+        aOptions: _getAndroidOptions(),
+      );
+      return result;
+    } on Exception catch (e) {
+      throw Exception("No Salt Found");
+    }
   }
 }

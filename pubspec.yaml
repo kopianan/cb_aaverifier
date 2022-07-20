@@ -32,10 +32,7 @@ dependencies:
   bloc: ^8.0.3
   camera: ^0.9.4+21
   clipboard: ^0.1.3 
-  cloud_storage:
-    git:
-      url:  https://github.com/kopianan/cb_cloud_storage.git
-      ref: main
+  
   coinbit_ui_mobile:
     git:
       url: https://gitlab.com/coinbitid/coinbit_ui_mobile.git
@@ -64,6 +61,15 @@ dependencies:
     git: 
       url: https://github.com/lustea00/test_encrypt
       ref: anandev
+
+  # cloud_storage:
+  #   git:
+  #     url: https://github.com/kopianan/cb_cloud_storage.git
+  #     ref: main
+  # test_encrypt: 
+  #   path: /Users/anan/test_encrypt
+  cloud_storage:
+    path: /Users/anan/Documents/References/cloud_storage
 
   web3dart: ^2.3.5
 

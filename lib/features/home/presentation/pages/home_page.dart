@@ -31,6 +31,26 @@ class _HomePageState extends State<HomePage> {
     NotificationService.checkPermission(context).then((value) {
       AwesomeNotifications().actionStream.listen(
         (ReceivedNotification receivedNotification) {
+          if (receivedNotification.payload!['topics'] == "recoverRequest") {
+            log("Recover Request");
+            final payload = receivedNotification.payload;
+            Future.delayed(Duration(seconds: 3)).then((value) =>
+                Navigator.of(context).pushNamed('/wallet_recovery_request_page',
+                    arguments: payload!['address']));
+
+            //SHOW DKG DIALOG HERE FOR APPROVE THE RECOVERY REQUEST
+            // final keyShared = context.read<GlobalCubit>().state.keyShare;
+            // if (keyShared != null) {
+            //   context.read<HomeBloc>().add(ApproveRecoverRequst(keyShared));
+            //   showDialog(
+            //       context: context,
+            //       builder: (context) {
+            //         return Container(
+            //           child: Center(child: CircularProgressIndicator()),
+            //         );
+            //       });
+            // }
+          }
           if (receivedNotification.payload!['topics'] == "dkg") {
             Navigator.of(context).pushNamed('/dkg_page');
           }
@@ -46,22 +66,26 @@ class _HomePageState extends State<HomePage> {
       (RemoteMessage message) {},
     );
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print(message);
       if (message.data['topics'] == 'dkg') {
         NotificationService.createDkgNotificationBanner(message.data);
       }
       if (message.data['topics'] == 'offlinesign') {
-        Future.delayed(Duration(seconds: 3))
-            .then((value) => context.read<DkgBloc>().add(
-                  ProccessPresign(
-                    index: 2,
-                    address: message.data['address'],
-                    hash: context.read<HomeBloc>().globalHash!,
-                  ),
-                ));
+        await Future.delayed(const Duration(seconds: 4)).then((value) {
+          context.read<DkgBloc>().add(
+                ProccessPresign(
+                  index: 2,
+                  address: message.data['address'],
+                  hash: context.read<HomeBloc>().globalHash!,
+                ),
+              );
+        });
       }
       if (message.data['topics'] == 'sign') {
         NotificationService.createSignNotificationBanner(message.data);
+      }
+      if (message.data['topics'] == 'recoverRequest') {
+        print(message.data);
+        NotificationService.createRecoverReqeustBanner(message.data);
       }
     });
     super.initState();
@@ -69,8 +93,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final homeBloc = context.watch<HomeBloc>();
-    log(homeBloc.address.toString(), name: "Home Address");
+    final homeBloc = context.read<HomeBloc>();
+    print(context.read<HomeBloc>().state);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

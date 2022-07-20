@@ -1,10 +1,8 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:test_encrypt/cb_encryption/encryption.dart';
 
 part 'login_event.dart';
@@ -12,7 +10,6 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   CBEncryptionHelper cbEncryption = CBEncryptionHelper();
-  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   LoginBloc() : super(LoginInitial()) {
     on<LoginUsingBiometry>(

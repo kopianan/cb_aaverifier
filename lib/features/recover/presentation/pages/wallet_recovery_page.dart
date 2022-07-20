@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
+import 'package:coinbit_verifier/core/services/fcm_service.dart';
 import 'package:coinbit_verifier/features/recover/presentation/bloc/recover_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -27,6 +28,28 @@ class _WalletRecoveryPageState extends State<WalletRecoveryPage> {
         bloc: bloc,
         listener: (context, state) {
           print(state);
+          if (state is OnRequestApproved) {
+            Navigator.of(context).pop();
+            print(state.presignKey);
+            print(state.sharedKey);
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("Approved")));
+          }
+          if (state is OnRequestRecover) {
+            //show dialog
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return Container(
+                    child: Column(
+                      children: [
+                        Center(child: CircleAvatar()),
+                        SizedBox(height: 20),
+                      ],
+                    ),
+                  );
+                });
+          }
           if (state is OnDownlodKeySuccess) {
             showModalBottomSheet(
               context: context,
@@ -64,8 +87,11 @@ class _WalletRecoveryPageState extends State<WalletRecoveryPage> {
             leading: Icon(Icons.add_to_drive_sharp),
             title: Text("Get From Google Drive"),
             onTap: () {
-              String hardCodeFileId = '1BIKNyQGyZ6cgPuWf7m3p2Dxi2Di_i_jM';
-              bloc.add(GetEncryptedKeyFromStorage(hardCodeFileId));
+              ///TODO:SOON
+              // String hardCodeFileId = '1BIKNyQGyZ6cgPuWf7m3p2Dxi2Di_i_jM';
+              // bloc.add(GetEncryptedKeyFromStorage(hardCodeFileId));
+
+              FCMService().createRecoverRequest();
             },
           )
         ]),

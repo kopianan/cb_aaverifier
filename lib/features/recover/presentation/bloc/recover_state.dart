@@ -1,15 +1,19 @@
 part of 'recover_bloc.dart';
 
-abstract class RecoverState extends Equatable {
-  const RecoverState();
-
-  @override
-  List<Object> get props => [];
-}
+@immutable
+abstract class RecoverState {}
 
 class RecoverInitial extends RecoverState {}
 
+class OnRequestRecover extends RecoverState {}
+
+class OnRequestApproved extends RecoverState {
+ final  String sharedKey;
+ final  String presignKey;
+  OnRequestApproved(this.sharedKey, this.presignKey);
+}
+
 class OnDownlodKeySuccess extends RecoverState {
-  Uint8List encryptedKey;
+  final Uint8List encryptedKey;
   OnDownlodKeySuccess(this.encryptedKey);
 }

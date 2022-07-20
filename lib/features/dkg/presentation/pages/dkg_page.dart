@@ -22,10 +22,10 @@ class _DKGPageState extends State<DKGPage> {
         title: const Text("Create Wallet"),
       ),
       body: BlocListener<DkgBloc, DkgState>(
-        listener: (context, state) async {
+        listener: (context, state) {
           print(state);
           if (state is GeneratingSharedKey) {
-            await showDkgDialog(context);
+            showDkgDialog(context);
           }
           if (state is OnPresignKeyGenerated) {
             //setup data to global state

@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:test_encrypt/cb_encryption/encryption.dart';
 
+import '../../../../core/services/storage.dart';
+
 part 'home_event.dart';
 part 'home_state.dart';
 
@@ -16,7 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Uint8List? globalEncryptedPresignKey;
   String? address;
   CBEncryptionHelper cbEncryptionHelper = CBEncryptionHelper();
-  final storage = FlutterSecureStorage();
+  final storage = Storage();
 
   HomeBloc() : super(HomeInitial()) {
     on<SetHash>(
@@ -26,7 +28,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
     on<RetreiveEncryptedKeys>(
       (event, emit) async {
-        address = await storage.read(key: 'address');
+        address = await storage.getAddress();
         final presignTag = "presignKey-$address";
         final sharedTag = "sharedKey-$address";
 
@@ -39,9 +41,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           sharedTag,
         );
 
-        print(encryptedKeyshared);
-        print(encryptedPresign);
-
         globalEncryptedSharedKey = encryptedKeyshared;
         globalEncryptedPresignKey = encryptedPresign;
       },
@@ -49,7 +48,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     on<GetAndDecryptPresign>(
       (event, emit) async {
-        final address = await storage.read(key: 'address');
+        final address = await storage.getAddress();
         final presignTag = "presignKey-$address";
         final presign = await cbEncryptionHelper.decryptKeyWithHardware(
             globalEncryptedPresignKey!, presignTag);
@@ -58,8 +57,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
     on<WatchWalletExisting>(
       (event, emit) async {
-        address = await storage.read(key: 'address');
+        address = await storage.getAddress();
       },
+    );
+    on<ApproveRecoverRequst>(
+      (event, emit) async {},
     );
   }
 }

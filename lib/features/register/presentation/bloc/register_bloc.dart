@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
+import 'package:coinbit_verifier/core/services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:test_encrypt/cb_encryption/encryption.dart';
@@ -13,7 +15,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   CBEncryptionHelper cbEncryption = CBEncryptionHelper();
 
-  FlutterSecureStorage secureStorage = const FlutterSecureStorage();
+  final storage = Storage();
   RegisterBloc() : super(RegisterInitial()) {
     on<MakePin>(
       (event, emit) async {
@@ -29,8 +31,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         } else {
           //Generate Hash with pin and generated salt
           //Save
-          secureStorage.write(key: "session", value: "exist");
-          
+          await storage.saveSession();
+          log("Save session");
           final hash = await cbEncryption.generateHash(pin);
           emit(PinConfrimed(hash!));
         }

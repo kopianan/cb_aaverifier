@@ -18,4 +18,9 @@ class GetAndDecryptPresign extends HomeEvent {
   GetAndDecryptPresign();
 }
 
+class ApproveRecoverRequst extends HomeEvent {
+  final Uint8List encryptedSharedKey;
+  ApproveRecoverRequst(this.encryptedSharedKey);
+}
+
 class WatchWalletExisting extends HomeEvent {}

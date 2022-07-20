@@ -9,6 +9,7 @@ import 'package:coinbit_verifier/features/login/presentation/pages/components/lo
 import 'package:coinbit_verifier/features/notification/presentation/pages/notification_page.dart';
 import 'package:coinbit_verifier/features/recover/presentation/bloc/recover_bloc.dart';
 import 'package:coinbit_verifier/features/recover/presentation/pages/wallet_recovery_page.dart';
+import 'package:coinbit_verifier/features/recover/presentation/pages/wallet_recovery_request_page.dart';
 import 'package:coinbit_verifier/features/register/presentation/bloc/register_bloc.dart';
 import 'package:coinbit_verifier/features/register/presentation/pages/components/register_biometric.dart';
 import 'package:coinbit_verifier/features/register/presentation/pages/components/register_pin.dart';
@@ -95,6 +96,8 @@ class _MyAppState extends State<MyApp> {
             "/setting_page": (_) => const SettingPage(),
             "/login_page": (_) => const LoginPin(),
             "/register_page": (_) => const RegisterPin(),
+            "/wallet_recovery_request_page": (_) =>
+                const WalletRecoveryRequestPage(),
             "/register_biometry": (_) => const RegisterBiometric(),
             "/wallet_recovery_page": (_) => const WalletRecoveryPage(),
             "/notification_page": (_) => const NotificationPage(),

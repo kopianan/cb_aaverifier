@@ -1,17 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.coinbit_verifier">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-      <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
-
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
    <application
         android:label="coinbit_verifier"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-
-        <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver" android:exported="false" />
-<receiver android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" android:exported="true" android:permission="com.google.android.c2dm.permission.SEND">
+      <receiver 
+        android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver" 
+        android:exported="false" />
+<receiver 
+  android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" 
+  android:exported="true" 
+  android:permission="com.google.android.c2dm.permission.SEND">
   <intent-filter>
     <action android:name="com.google.android.c2dm.intent.RECEIVE" />
     <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -31,9 +34,9 @@
                  while the Flutter UI initializes. After that, this theme continues
                  to determine the Window background behind the Flutter UI. -->
             <intent-filter>
-      <action android:name="FLUTTER_NOTIFICATION_CLICK" />
-      <category android:name="android.intent.category.DEFAULT" />
-  </intent-filter>
+              <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+              <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         <meta-data
         android:name="com.google.firebase.messaging.default_notification_channel_id"
         android:value="basic_channel" />

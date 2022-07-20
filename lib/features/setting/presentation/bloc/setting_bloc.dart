@@ -5,9 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_storage/cloud_storage.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:test_encrypt/cb_encryption/cb_converter.dart';
-import 'package:test_encrypt/cb_encryption/cb_encryption_helper.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; 
 import 'package:test_encrypt/cb_encryption/encryption.dart';
 
 part 'setting_event.dart';
@@ -34,7 +32,7 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
       (event, emit) async {
         final address = await storage.read(key: 'address');
         final sharedTag = "sharedKey-$address";
-        log(address.toString(), name: "Address");
+        
         try {
           final rawSharedKey = await cbEncryptionHelper.decryptKeyWithHardware(
               event.encryptedSharedKey, sharedTag);

@@ -4,6 +4,23 @@ import 'package:flutter/material.dart';
 String channelKey = 'basic_channel';
 
 class NotificationService {
+  static Future<void> createRecoverReqeustBanner(
+      Map<String, dynamic> customData) async {
+    await AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: DateTime.now().microsecond,
+        channelKey: channelKey,
+        groupKey: 'recover',
+        body: customData['body'],
+        title: customData['title'],
+        payload: {
+          'topics': customData['topics'],
+          'address': customData['address'],
+        },
+      ),
+    );
+  }
+
   static Future<bool> initializeAwesomeNotification() async {
     final result = await AwesomeNotifications().initialize(
       'resource://drawable/notify',
@@ -16,8 +33,6 @@ class NotificationService {
             channelDescription: "Descriptions"),
       ],
     );
-
-    
 
     return result;
   }
