@@ -2,11 +2,10 @@ import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_storage/cloud_storage.dart';
+import 'package:coinbit_secure_package/cb_encryption/encryption.dart';
 import 'package:coinbit_verifier/core/services/fcm_service.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:rust_mpc_ffi/lib.dart';
-import 'package:test_encrypt/cb_encryption/encryption.dart';
 
 part 'recover_event.dart';
 part 'recover_state.dart';
@@ -39,8 +38,8 @@ class RecoverBloc extends Bloc<RecoverEvent, RecoverState> {
       (event, emit) async {
         final tag = "sharedKey-${event.address}";
         final rawSharedKey = await cbEncryption.decryptKeyWithHardware(
-          event.encryptedKeyShared,
-          tag,
+          level1Encryption: event.encryptedKeyShared,
+          tag: tag,
         );
 
         //DO PRSIGN NOW

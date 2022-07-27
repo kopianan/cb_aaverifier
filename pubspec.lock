@@ -165,9 +165,11 @@ packages:
   cloud_storage:
     dependency: "direct main"
     description:
-      path: "/Users/anan/Documents/References/cloud_storage"
-      relative: false
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: f1029229131f0c9266a7c23561245780fe585c1e
+      url: "https://github.com/kopianan/cb_cloud_storage.git"
+    source: git
     version: "0.0.1"
   code_builder:
     dependency: transitive
@@ -176,6 +178,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
+  coinbit_secure_package:
+    dependency: "direct main"
+    description:
+      path: coinbit_secure_package
+      ref: main
+      resolved-ref: "47883197eaab8e4fb8341daab34710c6dcc0625c"
+      url: "https://gitlab.com/coinbitid/coinbit_flutter_security_package.git"
+    source: git
+    version: "0.0.1"
   coinbit_ui_mobile:
     dependency: "direct main"
     description:
@@ -346,6 +357,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_android_keystore:
+    dependency: transitive
+    description:
+      path: flutter_android_keystore
+      ref: main
+      resolved-ref: "47883197eaab8e4fb8341daab34710c6dcc0625c"
+      url: "https://gitlab.com/coinbitid/coinbit_flutter_security_package.git"
+    source: git
+    version: "0.1.1"
   flutter_bloc:
     dependency: "direct main"
     description:
@@ -353,24 +373,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.0.1"
-  flutter_hsm:
+  flutter_hardware_encryption:
     dependency: transitive
     description:
-      path: "."
-      ref: "feature/dev"
-      resolved-ref: "713bd937dffceda95a2d6448fb0d317232d03fa9"
-      url: "https://github.com/mazidahmad/flutter_hsm"
+      path: flutter_hardware_encryption
+      ref: main
+      resolved-ref: "47883197eaab8e4fb8341daab34710c6dcc0625c"
+      url: "https://gitlab.com/coinbitid/coinbit_flutter_security_package.git"
     source: git
-    version: "0.0.1"
-  flutter_keystore:
-    dependency: transitive
-    description:
-      path: "."
-      ref: "feature/biometric"
-      resolved-ref: "190c15f105217be846c927fa279a51db188080d3"
-      url: "https://github.com/mazidahmad/flutter_keystore.git"
-    source: git
-    version: "0.0.1"
+    version: "0.1.1"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -764,9 +775,11 @@ packages:
   secure_enclave:
     dependency: transitive
     description:
-      name: secure_enclave
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: flutter_ios_secure_enclave
+      ref: main
+      resolved-ref: "47883197eaab8e4fb8341daab34710c6dcc0625c"
+      url: "https://gitlab.com/coinbitid/coinbit_flutter_security_package.git"
+    source: git
     version: "0.0.2+rev1"
   shimmer:
     dependency: transitive
@@ -866,15 +879,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.9"
-  test_encrypt:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: anandev
-      resolved-ref: dba82f2aadbb9c27555c25440b90d9edaa4a4c45
-      url: "https://github.com/lustea00/test_encrypt"
-    source: git
-    version: "0.0.1"
   typed_data:
     dependency: transitive
     description:

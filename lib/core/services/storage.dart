@@ -13,9 +13,7 @@ class Storage {
 
   IOSOptions _getIOSOptions() => const IOSOptions();
 
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
+  AndroidOptions _getAndroidOptions() => const AndroidOptions();
 
   String session = 'session';
   String address = 'address';

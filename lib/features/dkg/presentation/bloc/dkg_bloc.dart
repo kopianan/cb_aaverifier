@@ -2,12 +2,13 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:bloc/bloc.dart';
+import 'package:coinbit_secure_package/cb_encryption/cb_converter.dart';
+import 'package:coinbit_secure_package/cb_encryption/cb_encryption_helper.dart';
 import 'package:coinbit_verifier/core/services/mpc_service.dart';
 import 'package:coinbit_verifier/core/services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rust_mpc_ffi/lib.dart';
-import 'package:test_encrypt/cb_encryption/encryption.dart';
 
 part 'dkg_event.dart';
 part 'dkg_state.dart';
@@ -33,9 +34,9 @@ class DkgBloc extends Bloc<DkgEvent, DkgState> {
         final converted = CBConverter.convertStringToUint8List(sharedKey);
         //Save with package
         Uint8List encryptedKey = await cbEncryption.encryptAndSaveKey(
-          event.hash,
-          converted,
-          tag,
+          hash: event.hash,
+          rawKey: converted,
+          tag: tag,
         );
         print(eth.hex);
         _shared = sharedKey;
@@ -45,19 +46,19 @@ class DkgBloc extends Bloc<DkgEvent, DkgState> {
 
     on<ProccessPresign>(
       (event, emit) async {
-        emit(GeneratingPresignKey()); 
+        emit(GeneratingPresignKey());
 
         final presignKey = await cbRustMpc.offlineSignWithJson(
           event.index,
           _shared!,
         );
- 
+
         final tag = "presignKey-${event.address}";
         final converted = CBConverter.convertStringToUint8List(presignKey);
         Uint8List encryptedKey = await cbEncryption.encryptAndSaveKey(
-          event.hash,
-          converted,
-          tag,
+          hash: event.hash,
+          rawKey: converted,
+          tag: tag,
         );
         emit(OnPresignKeyGenerated(encryptedKey));
       },

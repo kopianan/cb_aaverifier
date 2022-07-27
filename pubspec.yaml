@@ -56,20 +56,21 @@ dependencies:
   rust_mpc_ffi:
     git:
       url: https://github.com/kopianan/rust_mpc_ffi
-      ref: master
-  test_encrypt: 
-    git: 
-      url: https://github.com/lustea00/test_encrypt
-      ref: anandev
-
-  # cloud_storage:
-  #   git:
-  #     url: https://github.com/kopianan/cb_cloud_storage.git
-  #     ref: main
-  # test_encrypt: 
-  #   path: /Users/anan/test_encrypt
+      ref: master 
+  # coinbit_secure_package:
+  #   path: /Users/anan/coinbit_flutter_security_package/coinbit_secure_package
+  coinbit_secure_package:
+    git:
+      url: https://gitlab.com/coinbitid/coinbit_flutter_security_package.git
+      ref: main
+      path: coinbit_secure_package/
+  
   cloud_storage:
-    path: /Users/anan/Documents/References/cloud_storage
+    git:
+      url: https://github.com/kopianan/cb_cloud_storage.git
+      ref: main 
+  # cloud_storage:
+  #   path: /Users/anan/Documents/References/cloud_storage
 
   web3dart: ^2.3.5
 

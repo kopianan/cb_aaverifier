@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:test_encrypt/cb_encryption/encryption.dart';
+import 'package:coinbit_secure_package/cb_encryption/encryption.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
