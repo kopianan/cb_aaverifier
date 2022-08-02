@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:clipboard/clipboard.dart';
 import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
 import 'package:coinbit_verifier/features/home/presentation/bloc/home_bloc.dart';

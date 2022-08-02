@@ -12,10 +12,13 @@ class RecoverProccess extends RecoverEvent {
   final int index;
   final String address;
   final Uint8List encryptedKeyShared;
-  RecoverProccess(
-      {required this.index,
-      required this.encryptedKeyShared,
-      required this.address});
+  final Uint8List hash;
+  RecoverProccess({
+    required this.index,
+    required this.encryptedKeyShared,
+    required this.address,
+    required this.hash,
+  });
 }
 
 class DecryptKey extends RecoverEvent {

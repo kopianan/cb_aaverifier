@@ -40,7 +40,10 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
               await CBEncryptionHelper().encryptWithCustomHash(
             CBConverter.convertStringToUint8List(rawSharedKey),
           );
-          emit(OnDecryptSuccess(encryptedSecretBox));
+          emit(OnDecryptSuccess(
+            UploadResponse(
+                encryptedSecretBox.hash, encryptedSecretBox.encrypted),
+          ));
         } catch (e) {
           print(e);
           print("ERROR DECRYPT");

@@ -1,8 +1,7 @@
 import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
-import 'package:coinbit_verifier/core/services/fcm_service.dart';
+import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart'; 
 import 'package:coinbit_verifier/core/services/notifications_service.dart';
 
 import 'package:coinbit_verifier/features/dkg/presentation/bloc/dkg_bloc.dart';
@@ -34,9 +33,12 @@ class _HomePageState extends State<HomePage> {
           if (receivedNotification.payload!['topics'] == "recoverRequest") {
             log("Recover Request");
             final payload = receivedNotification.payload;
-            Future.delayed(Duration(seconds: 3)).then((value) =>
-                Navigator.of(context).pushNamed('/wallet_recovery_request_page',
-                    arguments: payload!['address']));
+            Future.delayed(Duration(seconds: 3)).then(
+              (value) => Navigator.of(context).pushNamed(
+                '/wallet_recovery_request_page',
+                arguments: payload!['address'],
+              ),
+            );
 
             //SHOW DKG DIALOG HERE FOR APPROVE THE RECOVERY REQUEST
             // final keyShared = context.read<GlobalCubit>().state.keyShare;

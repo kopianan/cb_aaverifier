@@ -1,3 +1,4 @@
+import 'package:coinbit_verifier/features/dkg/presentation/bloc/dkg_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -30,15 +31,24 @@ class _WalletRecoveryRequestPageState extends State<WalletRecoveryRequestPage> {
     final level1EncryptedSharedKey =
         context.read<HomeBloc>().globalEncryptedSharedKey;
 
-    return BlocProvider(
-      create: (context) => RecoverBloc()
-        ..add(RecoverProccess(
-            index: 2,
-            encryptedKeyShared: level1EncryptedSharedKey!,
-            address: address)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => RecoverBloc()
+            ..add(RecoverProccess(
+                index: 2,
+                encryptedKeyShared: level1EncryptedSharedKey!,
+                address: address,
+                hash: context.read<HomeBloc>().globalHash!)),
+        ),
+      ],
       child: BlocConsumer<RecoverBloc, RecoverState>(
         listener: (context, state) {
-          print(state);
+          if (state is OnRecoverSuccess) {
+            context
+                .read<HomeBloc>()
+                .add(SetHash(context.read<HomeBloc>().globalHash!));
+          }
         },
         builder: (context, state) {
           return Scaffold(
