@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:coinbit_verifier/features/dkg/presentation/bloc/dkg_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -45,9 +47,11 @@ class _WalletRecoveryRequestPageState extends State<WalletRecoveryRequestPage> {
       child: BlocConsumer<RecoverBloc, RecoverState>(
         listener: (context, state) {
           if (state is OnRecoverSuccess) {
-            context
-                .read<HomeBloc>()
-                .add(SetHash(context.read<HomeBloc>().globalHash!));
+            var hash = context.read<HomeBloc>().globalHash!;
+            context.read<HomeBloc>().add(SetHash(hash));
+            context.read<HomeBloc>().add(RetreiveEncryptedKeys(hash));
+            hash = Uint8List.fromList([1]);
+            hash.clear();
           }
         },
         builder: (context, state) {

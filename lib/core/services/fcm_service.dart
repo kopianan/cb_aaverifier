@@ -7,11 +7,17 @@ class FCMService {
     final fcm = FirebaseMessaging.instance;
     final token = await FirebaseMessaging.instance.getToken();
     log(token.toString());
-    await FirebaseMessaging.instance.subscribeToTopic('dkg');
-    await FirebaseMessaging.instance.subscribeToTopic("sign");
-    await FirebaseMessaging.instance.subscribeToTopic("offlinesign");
-    await FirebaseMessaging.instance.subscribeToTopic("recoverRequest");
-    log("Subscribe to DKG and OFFLINESIGN");
+    log("TRYING TO SUBSCRIBE");
+    try {
+      await fcm.subscribeToTopic("dkg");
+      await fcm.subscribeToTopic("sign");
+      await fcm.subscribeToTopic("offlinesign");
+      await fcm.subscribeToTopic("recoverRequest");
+    } catch (e) {
+      log(e.toString());
+    }
+
+    log("Subscribed Topic");
   }
 
   Future<void> createRecoverRequest() async {

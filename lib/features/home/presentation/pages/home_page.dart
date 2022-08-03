@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart'; 
+import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
 import 'package:coinbit_verifier/core/services/notifications_service.dart';
 
 import 'package:coinbit_verifier/features/dkg/presentation/bloc/dkg_bloc.dart';
@@ -9,6 +9,8 @@ import 'package:coinbit_verifier/features/home/presentation/bloc/home_bloc.dart'
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/services/fcm_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,6 +27,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    FCMService.subscribeFCM();
+
     FirebaseMessaging.instance.getInitialMessage();
 
     NotificationService.checkPermission(context).then((value) {
@@ -96,7 +100,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final homeBloc = context.read<HomeBloc>();
-    print(context.read<HomeBloc>().state);
 
     return Scaffold(
       appBar: AppBar(
@@ -115,6 +118,9 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.notifications))
         ],
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        log(homeBloc.globalEncryptedPresignKey.toString());
+      }),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

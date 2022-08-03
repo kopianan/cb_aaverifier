@@ -36,7 +36,6 @@ void main() async {
 
   await NotificationService.initializeAwesomeNotification();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  FCMService.subscribeFCM();
 
   CBRustMpc().setup();
   runApp(const MyApp());
