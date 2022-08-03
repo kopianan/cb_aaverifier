@@ -50,8 +50,7 @@ class _WalletRecoveryRequestPageState extends State<WalletRecoveryRequestPage> {
             var hash = context.read<HomeBloc>().globalHash!;
             context.read<HomeBloc>().add(SetHash(hash));
             context.read<HomeBloc>().add(RetreiveEncryptedKeys(hash));
-            hash = Uint8List.fromList([1]);
-            hash.clear();
+           
           }
         },
         builder: (context, state) {

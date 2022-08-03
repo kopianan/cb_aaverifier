@@ -48,7 +48,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         final address = await storage.getAddress();
         final presignTag = "presignKey-$address";
         final presign = await cbEncryptionHelper.decryptKeyWithHardware(
-            level1Encryption: globalEncryptedPresignKey!, tag: presignTag);
+          level1Encryption: globalEncryptedPresignKey!,
+          tag: presignTag,
+        );
         emit(OnGetDecryptedPresign(presign));
       },
     );

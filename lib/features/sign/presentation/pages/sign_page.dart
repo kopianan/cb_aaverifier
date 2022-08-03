@@ -57,37 +57,39 @@ class _SignPageState extends State<SignPage> {
                         TableRow(
                           children: [
                             const CellLabelWidget(value: "From :"),
-                            CellValueWidget(value: txObject['from']),
+                            CellValueWidget(value: txObject['from'].toString()),
                           ],
                         ),
                         TableRow(
                           children: [
                             const CellLabelWidget(value: "To :"),
-                            CellValueWidget(value: txObject['to']),
+                            CellValueWidget(value: txObject['to'].toString()),
                           ],
                         ),
                         TableRow(
                           children: [
                             const CellLabelWidget(value: "MaxGas :"),
-                            CellValueWidget(value: txObject['maxGas']),
+                            CellValueWidget(
+                                value: txObject['maxGas'].toString()),
                           ],
                         ),
                         TableRow(
                           children: [
                             const CellLabelWidget(value: "Nonce :"),
-                            CellValueWidget(value: txObject['gasPrice']),
+                            CellValueWidget(
+                                value: txObject['gasPrice'].toString()),
                           ],
                         ),
                         TableRow(
                           children: [
                             const CellLabelWidget(value: "Value :"),
-                            CellValueWidget(value: txObject['value']),
+                            CellValueWidget(value: txObject['value'].toString()),
                           ],
                         ),
                         TableRow(
                           children: [
                             const CellLabelWidget(value: "Data :"),
-                            CellValueWidget(value: txObject['data']),
+                            CellValueWidget(value: txObject['data'].toString()),
                           ],
                         ),
                       ],
@@ -134,7 +136,7 @@ class CellValueWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Text(
-        value,
+        value.toString(),
         style: CBText.regulerBody14px,
       ),
     );

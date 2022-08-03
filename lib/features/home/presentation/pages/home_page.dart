@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:coinbit_secure_package/cb_encryption/cb_converter.dart';
 import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
 import 'package:coinbit_verifier/core/services/notifications_service.dart';
 
@@ -27,8 +28,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    FCMService.subscribeFCM();
-
     FirebaseMessaging.instance.getInitialMessage();
 
     NotificationService.checkPermission(context).then((value) {
@@ -76,15 +75,17 @@ class _HomePageState extends State<HomePage> {
         NotificationService.createDkgNotificationBanner(message.data);
       }
       if (message.data['topics'] == 'offlinesign') {
-        await Future.delayed(const Duration(seconds: 4)).then((value) {
-          context.read<DkgBloc>().add(
-                ProccessPresign(
-                  index: 2,
-                  address: message.data['address'],
-                  hash: context.read<HomeBloc>().globalHash!,
-                ),
-              );
-        });
+        await Future.delayed(const Duration(seconds: 4)).then(
+          (value) {
+            context.read<DkgBloc>().add(
+                  ProccessPresign(
+                    index: 2,
+                    address: message.data['address'],
+                    hash: context.read<HomeBloc>().globalHash!,
+                  ),
+                );
+          },
+        );
       }
       if (message.data['topics'] == 'sign') {
         NotificationService.createSignNotificationBanner(message.data);
@@ -101,54 +102,64 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final homeBloc = context.read<HomeBloc>();
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("VERIFIER"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/setting_page');
-              },
-              icon: const Icon(Icons.settings)),
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/notification_page');
-              },
-              icon: const Icon(Icons.notifications))
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        log(homeBloc.globalEncryptedPresignKey.toString());
-      }),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Text(
-                (homeBloc.address != null)
-                    ? "This is your wallet"
-                    : "Create Wallet should trigger from notification",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
+    return BlocListener<DkgBloc, DkgState>(
+      listener: (context, state) {
+        if (state is OnPresignKeyGenerated) {
+          //update home bloc
+          context
+              .read<HomeBloc>()
+              .add(RetreiveEncryptedKeys(homeBloc.globalHash!));
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("VERIFIER"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/setting_page');
+                },
+                icon: const Icon(Icons.settings)),
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/notification_page');
+                },
+                icon: const Icon(Icons.notifications))
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(onPressed: () {
+          log(homeBloc.globalEncryptedPresignKey.toString());
+        }),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  (homeBloc.address != null)
+                      ? "This is your wallet"
+                      : "Create Wallet should trigger from notification",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            Visibility(
-                visible: (homeBloc.address == null) ? true : false,
-                child: CBBtnOutline(
-                  text: "Recover Wallet",
-                  onPressed: () async {
-                    Navigator.of(context).pushNamed('/wallet_recovery_page');
-                  },
-                ))
-          ],
+              Visibility(
+                  visible: (homeBloc.address == null) ? true : false,
+                  child: CBBtnOutline(
+                    text: "Recover Wallet",
+                    onPressed: () async {
+                      Navigator.of(context).pushNamed('/wallet_recovery_page');
+                    },
+                  ))
+            ],
+          ),
         ),
       ),
     );

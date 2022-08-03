@@ -45,7 +45,7 @@ class RecoverBloc extends Bloc<RecoverEvent, RecoverState> {
         //DO PRSIGN NOW
         final newPresign =
             await mpc.offlineSignWithJson(event.index, rawSharedKey);
-
+        print(newPresign);
         final presignTag = "presignKey-${event.address}";
         final converted = CBConverter.convertStringToUint8List(newPresign);
 
