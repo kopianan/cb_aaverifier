@@ -48,18 +48,30 @@ class DkgBloc extends Bloc<DkgEvent, DkgState> {
       (event, emit) async {
         emit(GeneratingPresignKey());
 
+        final tag = "sharedKey-${event.address}";
+
+        //check if _shared key null
+        //shared is local variable, hanya akan terisi di awal jika proses dkg selesai
+        if (_shared == null || _shared! == "") {
+          _shared = await cbEncryption.decryptKeyWithHardware(
+            level1Encryption: event.layer1SharedKey!,
+            tag: tag,
+          );
+        }
+
         final presignKey = await cbRustMpc.offlineSignWithJson(
           event.index,
           _shared!,
         );
 
-        final tag = "presignKey-${event.address}";
         final converted = CBConverter.convertStringToUint8List(presignKey);
         Uint8List encryptedKey = await cbEncryption.encryptAndSaveKey(
           hash: event.hash,
           rawKey: converted,
           tag: tag,
         );
+        //clean
+        _shared = null;
         emit(OnPresignKeyGenerated(encryptedKey));
       },
     );

@@ -79,10 +79,11 @@ class _HomePageState extends State<HomePage> {
           (value) {
             context.read<DkgBloc>().add(
                   ProccessPresign(
-                    index: 2,
-                    address: message.data['address'],
-                    hash: context.read<HomeBloc>().globalHash!,
-                  ),
+                      index: 2,
+                      address: message.data['address'],
+                      hash: context.read<HomeBloc>().globalHash!,
+                      layer1SharedKey:
+                          context.read<HomeBloc>().globalEncryptedSharedKey),
                 );
           },
         );
