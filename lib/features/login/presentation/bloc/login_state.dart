@@ -11,6 +11,5 @@ class LoginFailed extends LoginState {
 }
 
 class LoginSuccess extends LoginState {
-  final Uint8List hash;
-  LoginSuccess(this.hash);
+  LoginSuccess();
 }

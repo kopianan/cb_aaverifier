@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/services/fcm_service.dart';
+import '../../../../core/storage/stash_in_memory.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -79,11 +80,9 @@ class _HomePageState extends State<HomePage> {
           (value) {
             context.read<DkgBloc>().add(
                   ProccessPresign(
-                      index: 2,
-                      address: message.data['address'],
-                      hash: context.read<HomeBloc>().globalHash!,
-                      layer1SharedKey:
-                          context.read<HomeBloc>().globalEncryptedSharedKey),
+                    index: 2,
+                    address: message.data['address'],
+                  ),
                 );
           },
         );
@@ -105,12 +104,7 @@ class _HomePageState extends State<HomePage> {
 
     return BlocListener<DkgBloc, DkgState>(
       listener: (context, state) {
-        if (state is OnPresignKeyGenerated) {
-          //update home bloc
-          context
-              .read<HomeBloc>()
-              .add(RetreiveEncryptedKeys(homeBloc.globalHash!));
-        }
+        if (state is OnPresignKeyGenerated) {}
       },
       child: Scaffold(
         appBar: AppBar(
@@ -129,8 +123,10 @@ class _HomePageState extends State<HomePage> {
                 icon: const Icon(Icons.notifications))
           ],
         ),
-        floatingActionButton: FloatingActionButton(onPressed: () {
-          log(homeBloc.globalEncryptedPresignKey.toString());
+        floatingActionButton: FloatingActionButton(onPressed: () async {
+          StashInMemory stashInMemory = StashInMemory();
+          final _current = await stashInMemory.getCredential();
+          print(_current!);
         }),
         body: Padding(
           padding: const EdgeInsets.all(20.0),

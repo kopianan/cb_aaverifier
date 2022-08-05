@@ -14,8 +14,7 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       (event, emit) async {
         emit(OnCheckingUser());
         try {
-          final result = await storage.getSession();
-          print(result);
+          final result = await storage.getAddress(); 
           if (result != null) {
             emit(OnUserExist());
           } else {

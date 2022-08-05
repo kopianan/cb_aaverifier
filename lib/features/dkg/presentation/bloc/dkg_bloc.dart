@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rust_mpc_ffi/lib.dart';
 
+import '../../../../core/storage/stash_in_memory.dart';
+
 part 'dkg_event.dart';
 part 'dkg_state.dart';
 
@@ -18,61 +20,73 @@ class DkgBloc extends Bloc<DkgEvent, DkgState> {
   MPCService mpcService = MPCService();
   CBEncryptionHelper cbEncryption = CBEncryptionHelper();
   final storage = Storage();
+  final stashInMemory = StashInMemory();
 
-  String? _shared = '';
+  dynamic rawKeyShare;
   DkgBloc() : super(ProccessDKGInitial()) {
     on<ProccessDkg>(
       (event, emit) async {
+        late Uint8List layer1Keyshare;
+        final currentInMemory = await stashInMemory.getCredential();
+
         //Proccessing DKG
         emit(GeneratingSharedKey());
-        final sharedKey = await cbRustMpc.proccessDkgString(event.index);
-        //Get Address
-        final eth = await mpcService.generateAddress(sharedKey.toString());
-        //save has for generating tag
-        await storage.saveAddress(eth.hex);
-        final tag = "sharedKey-${eth.hex}";
-        final converted = CBConverter.convertStringToUint8List(sharedKey);
-        //Save with package
-        Uint8List encryptedKey = await cbEncryption.encryptAndSaveKey(
-          hash: event.hash,
-          rawKey: converted,
-          tag: tag,
-        );
-        print(eth.hex);
-        _shared = sharedKey;
-        emit(OnSharedKeyGenerated(encryptedKey));
+        rawKeyShare = await cbRustMpc.proccessDkgString(event.index);
+
+        if (rawKeyShare != 'null') {
+          layer1Keyshare = await cbEncryption.encryptAndSaveKey(
+            hash: currentInMemory!.argonHash!,
+            rawKey:
+                CBConverter.convertStringToUint8List(rawKeyShare.toString()),
+            tag: 'evm-keyshare',
+          );
+
+          /// store keyshare in memory
+          await stashInMemory.credential.put(
+            stashInMemory.credetialKey,
+            currentInMemory.copyWith(keyshare: layer1Keyshare),
+          );
+          //Get Address
+          final eth = await mpcService.generateAddress(rawKeyShare.toString());
+          //save has for generating tag
+          await storage.saveAddress(eth.hex);
+
+          emit(OnSharedKeyGenerated());
+        }
       },
     );
 
     on<ProccessPresign>(
       (event, emit) async {
+        final currentInMemory = await stashInMemory.getCredential();
+
         emit(GeneratingPresignKey());
-
-        final tag = "sharedKey-${event.address}";
-
-        //check if _shared key null
-        //shared is local variable, hanya akan terisi di awal jika proses dkg selesai
-        if (_shared == null || _shared! == "") {
-          _shared = await cbEncryption.decryptKeyWithHardware(
-            level1Encryption: event.layer1SharedKey!,
-            tag: tag,
-          );
-        }
+        //if null just decrypt shared key from hardware
+        rawKeyShare ??= await cbEncryption.decryptKeyWithHardware(
+          level1Encryption: currentInMemory!.keyshare!,
+          tag: 'evm-keyshare',
+        );
 
         final presignKey = await cbRustMpc.offlineSignWithJson(
           event.index,
-          _shared!,
+          rawKeyShare!,
         );
+        //check if _shared key null
+        //shared is local variable, hanya akan terisi di awal jika proses dkg selesai
 
         final converted = CBConverter.convertStringToUint8List(presignKey);
-        Uint8List encryptedKey = await cbEncryption.encryptAndSaveKey(
-          hash: event.hash,
+        Uint8List layer1PresignKey = await cbEncryption.encryptAndSaveKey(
+          hash: currentInMemory!.argonHash!,
           rawKey: converted,
-          tag: tag,
+          tag: 'evm-presign',
         );
-        //clean
-        _shared = null;
-        emit(OnPresignKeyGenerated(encryptedKey));
+
+        await stashInMemory.credential.put(
+          stashInMemory.credetialKey,
+          currentInMemory.copyWith(presign: layer1PresignKey),
+        );
+        rawKeyShare = null;
+        emit(OnPresignKeyGenerated());
       },
     );
   }

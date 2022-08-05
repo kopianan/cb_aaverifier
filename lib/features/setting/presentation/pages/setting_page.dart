@@ -1,11 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:clipboard/clipboard.dart';
-import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
-import 'package:coinbit_verifier/features/home/presentation/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/setting_bloc.dart';
@@ -109,11 +105,11 @@ class _SettingPageState extends State<SettingPage> {
                 title: const Text("Backup Wallet"),
                 subtitle: const Text("Backup wallet to cloud storage"),
                 onTap: () {
-                  final encryptedSharedKey =
-                      context.read<HomeBloc>().globalEncryptedSharedKey;
-                  context
-                      .read<SettingBloc>()
-                      .add(EncryptDecrypt(encryptedSharedKey!));
+                  // final encryptedSharedKey =
+                  //     context.read<HomeBloc>().globalEncryptedSharedKey;
+                  // context
+                  //     .read<SettingBloc>()
+                  //     .add(EncryptDecrypt(encryptedSharedKey!));
                 },
               ),
             ],

@@ -6,11 +6,6 @@ class RegisterInitial extends RegisterState {}
 
 class WrongPin extends RegisterState {}
 
-class PinConfrimed extends RegisterState {
-  final Uint8List hash;
-  PinConfrimed(this.hash);
-}
-
 class OnPinMade extends RegisterState {
   final int step;
 

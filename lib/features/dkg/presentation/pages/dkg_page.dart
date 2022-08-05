@@ -29,8 +29,6 @@ class _DKGPageState extends State<DKGPage> {
           }
           if (state is OnPresignKeyGenerated) {
             //setup data to global state
-            final hash = context.read<HomeBloc>().globalHash;
-            context.read<HomeBloc>().add((RetreiveEncryptedKeys(hash!)));
 
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacementNamed('/success_dkg');
@@ -69,7 +67,6 @@ class _DKGPageState extends State<DKGPage> {
                   context.read<DkgBloc>().add(
                         ProccessDkg(
                           index: 2,
-                          hash: homeBloc.globalHash!,
                         ),
                       );
                 },

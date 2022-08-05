@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:coinbit_verifier/core/storage/security_service.dart';
 import 'package:coinbit_verifier/features/global/auth_page_header_widget.dart';
 import 'package:coinbit_verifier/features/home/presentation/bloc/home_bloc.dart';
 import 'package:coinbit_verifier/features/register/presentation/bloc/register_bloc.dart';
@@ -23,6 +24,7 @@ class RegisterPin extends StatefulWidget {
 
 class _OnBoardingPinState extends State<RegisterPin> {
   final List<int> _inputtedPin = [];
+  SecurityServiceImpl securityService = SecurityServiceImpl();
 
   PinPageType? type;
   String? previousePin;
@@ -59,27 +61,6 @@ class _OnBoardingPinState extends State<RegisterPin> {
           _inputtedPin.clear();
           ScaffoldMessenger.of(context)
               .showSnackBar(SnackBar(content: Text("Pin Wrong")));
-        }
-        if (state is PinConfrimed) {
-          _inputtedPin.clear();
-          //Send hash to HOMEBLOC
-          context.read<HomeBloc>().add(SetHash(state.hash));
-          //Save to
-          if (Platform.isAndroid) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              '/register_biometry',
-              ModalRoute.withName('/splash_page'),
-              arguments: [state.hash, BiometricType.finger],
-            );
-          } else {
-            Navigator.of(context).pushReplacementNamed(
-              '/register_biometry',
-              arguments: [state.hash, BiometricType.faceid],
-            );
-          }
-
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text("Pin Successful made")));
         }
       },
       builder: (context, state) {
@@ -160,7 +141,31 @@ class _OnBoardingPinState extends State<RegisterPin> {
                         //   newPin: _inputtedPin,
                         // );
                       } else {
-                        context.read<RegisterBloc>().add(ConfirmPin(pin));
+                        securityService.generateHash(
+                          pin: pin,
+                          onSuccess: () {
+                            _inputtedPin.clear();
+
+                            if (Platform.isAndroid) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/register_biometry',
+                                ModalRoute.withName('/splash_page'),
+                                arguments: BiometricType.finger,
+                              );
+                            } else {
+                              Navigator.of(context).pushReplacementNamed(
+                                '/register_biometry',
+                                arguments: BiometricType.faceid,
+                              );
+                            }
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Pin Successful made"),
+                              ),
+                            );
+                          },
+                        );
                         // return  RegisterBiometric(
                         //   type: BiometricType.finger,
                         // );

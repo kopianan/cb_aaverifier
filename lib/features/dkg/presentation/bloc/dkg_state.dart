@@ -10,14 +10,8 @@ class ProccessDKGInitial extends DkgState {
 
 class GeneratingSharedKey extends DkgState {}
 
-class OnSharedKeyGenerated extends DkgState {
-  final Uint8List encryptedSharedKey;
-  OnSharedKeyGenerated(this.encryptedSharedKey);
-}
+class OnSharedKeyGenerated extends DkgState {}
 
 class GeneratingPresignKey extends DkgState {}
 
-class OnPresignKeyGenerated extends DkgState {
-  final Uint8List encryptedSharedKey;
-  OnPresignKeyGenerated(this.encryptedSharedKey);
-}
+class OnPresignKeyGenerated extends DkgState {}

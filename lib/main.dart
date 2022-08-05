@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rust_mpc_ffi/lib.dart';
 
+import 'core/storage/stash_in_memory.dart';
 import 'features/dkg/presentation/pages/success_dkg_page.dart';
 import 'features/onboard/presentation/pages/onboard_page.dart';
 import 'features/setting/presentation/pages/setting_page.dart';
@@ -34,9 +35,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  await StashInMemory().init();
   await NotificationService.initializeAwesomeNotification();
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-    FCMService.subscribeFCM();
+  FCMService.subscribeFCM();
 
   CBRustMpc().setup();
   runApp(const MyApp());

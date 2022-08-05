@@ -30,29 +30,19 @@ class _WalletRecoveryRequestPageState extends State<WalletRecoveryRequestPage> {
   @override
   Widget build(BuildContext context) {
     final address = ModalRoute.of(context)!.settings.arguments as String;
-    final level1EncryptedSharedKey =
-        context.read<HomeBloc>().globalEncryptedSharedKey;
 
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => RecoverBloc()
             ..add(RecoverProccess(
-                index: 2,
-                encryptedKeyShared: level1EncryptedSharedKey!,
-                address: address,
-                hash: context.read<HomeBloc>().globalHash!)),
+              index: 2,
+              address: address,
+            )),
         ),
       ],
       child: BlocConsumer<RecoverBloc, RecoverState>(
-        listener: (context, state) {
-          if (state is OnRecoverSuccess) {
-            var hash = context.read<HomeBloc>().globalHash!;
-            context.read<HomeBloc>().add(SetHash(hash));
-            context.read<HomeBloc>().add(RetreiveEncryptedKeys(hash));
-           
-          }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(

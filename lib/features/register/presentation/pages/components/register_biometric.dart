@@ -17,13 +17,12 @@ class RegisterBiometric extends StatefulWidget {
 }
 
 class _RegisterBiometricState extends State<RegisterBiometric> {
-  Uint8List? hash;
   BiometricType? type;
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as dynamic;
-    hash = args[0] as Uint8List;
-    type = args[1] as BiometricType;
+
+    type = args as BiometricType;
     return BlocConsumer<RegisterBloc, RegisterState>(
       listener: (context, state) {
         print(state);
@@ -61,9 +60,7 @@ class _RegisterBiometricState extends State<RegisterBiometric> {
                     CBBtnPrimary(
                       text: "Aktifkan Sekarang",
                       onPressed: () async {
-                        context
-                            .read<RegisterBloc>()
-                            .add(ActivateBiometry(hash!));
+                        context.read<RegisterBloc>().add(ActivateBiometry());
                       },
                     ),
                     const SizedBox(height: 32),

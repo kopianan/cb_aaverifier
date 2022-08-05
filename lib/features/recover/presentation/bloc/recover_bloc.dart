@@ -36,26 +36,26 @@ class RecoverBloc extends Bloc<RecoverEvent, RecoverState> {
     );
     on<RecoverProccess>(
       (event, emit) async {
-        final sharedTag = "sharedKey-${event.address}";
-        final rawSharedKey = await cbEncryption.decryptKeyWithHardware(
-          level1Encryption: event.encryptedKeyShared,
-          tag: sharedTag,
-        );
+        // final sharedTag = "sharedKey-${event.address}";
+        // final rawSharedKey = await cbEncryption.decryptKeyWithHardware(
+        //   level1Encryption: event.encryptedKeyShared,
+        //   tag: sharedTag,
+        // );
 
-        //DO PRSIGN NOW
-        final newPresign =
-            await mpc.offlineSignWithJson(event.index, rawSharedKey);
-        print(newPresign);
-        final presignTag = "presignKey-${event.address}";
-        final converted = CBConverter.convertStringToUint8List(newPresign);
+        // //DO PRSIGN NOW
+        // final newPresign =
+        //     await mpc.offlineSignWithJson(event.index, rawSharedKey);
+        // print(newPresign);
+        // final presignTag = "presignKey-${event.address}";
+        // final converted = CBConverter.convertStringToUint8List(newPresign);
 
-        //Save and replace old presign
-        Uint8List encryptedKey = await cbEncryption.encryptAndSaveKey(
-          hash: event.hash,
-          rawKey: converted,
-          tag: presignTag,
-        );
-        emit(OnRecoverSuccess(encryptedKey));
+        // //Save and replace old presign
+        // Uint8List encryptedKey = await cbEncryption.encryptAndSaveKey(
+        //   hash: event.hash,
+        //   rawKey: converted,
+        //   tag: presignTag,
+        // );
+        // emit(OnRecoverSuccess(encryptedKey));
       },
     );
   }

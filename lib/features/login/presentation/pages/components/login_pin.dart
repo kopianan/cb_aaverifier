@@ -43,10 +43,6 @@ class _OnBoardingPinState extends State<LoginPin> {
               .showSnackBar(SnackBar(content: Text(state.message)));
         }
         if (state is LoginSuccess) {
-         
-          context.read<HomeBloc>().add(SetHash(state.hash));
-          context.read<HomeBloc>().add(WatchWalletExisting());
-          context.read<HomeBloc>().add((RetreiveEncryptedKeys(state.hash)));
           Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => const HomePage()));
         }

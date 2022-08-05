@@ -9,14 +9,6 @@ class MakePin extends RegisterEvent {
   MakePin(this.pin);
 }
 
-class ConfirmPin extends RegisterEvent {
-  final String confirmPin;
-
-  ConfirmPin(this.confirmPin);
-}
-
 class ActivateBiometry extends RegisterEvent {
-  final Uint8List hash;
-
-  ActivateBiometry(this.hash);
+  ActivateBiometry();
 }
