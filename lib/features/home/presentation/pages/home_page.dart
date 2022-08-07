@@ -147,14 +147,14 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              Visibility(
-                  visible: (homeBloc.address == null) ? true : false,
-                  child: CBBtnOutline(
-                    text: "Recover Wallet",
-                    onPressed: () async {
-                      Navigator.of(context).pushNamed('/wallet_recovery_page');
-                    },
-                  ))
+              // Visibility(
+              //     visible: (homeBloc.address == null) ? true : false,
+              //     child: CBBtnOutlined(
+              //       text: "Recover Wallet",
+              //       onPressed: () async {
+              //         Navigator.of(context).pushNamed('/wallet_recovery_page');
+              //       },
+              //     ))
             ],
           ),
         ),

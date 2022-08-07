@@ -8,7 +8,6 @@ import 'package:coinbit_verifier/features/login/presentation/bloc/login_bloc.dar
 import 'package:coinbit_verifier/features/login/presentation/pages/components/login_pin.dart';
 import 'package:coinbit_verifier/features/notification/presentation/pages/notification_page.dart';
 import 'package:coinbit_verifier/features/recover/presentation/bloc/recover_bloc.dart';
-import 'package:coinbit_verifier/features/recover/presentation/pages/wallet_recovery_page.dart';
 import 'package:coinbit_verifier/features/recover/presentation/pages/wallet_recovery_request_page.dart';
 import 'package:coinbit_verifier/features/register/presentation/bloc/register_bloc.dart';
 import 'package:coinbit_verifier/features/register/presentation/pages/components/register_biometric.dart';
@@ -101,7 +100,6 @@ class _MyAppState extends State<MyApp> {
             "/wallet_recovery_request_page": (_) =>
                 const WalletRecoveryRequestPage(),
             "/register_biometry": (_) => const RegisterBiometric(),
-            "/wallet_recovery_page": (_) => const WalletRecoveryPage(),
             "/notification_page": (_) => const NotificationPage(),
           },
           theme: ThemeData(

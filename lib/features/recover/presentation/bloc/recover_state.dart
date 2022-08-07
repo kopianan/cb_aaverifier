@@ -18,7 +18,4 @@ class OnDownlodKeySuccess extends RecoverState {
   OnDownlodKeySuccess(this.encryptedKey);
 }
 
-class OnRecoverSuccess extends RecoverState {
-  final Uint8List level1EncryptedPresignKey;
-  OnRecoverSuccess(this.level1EncryptedPresignKey);
-}
+class OnRecoverSuccess extends RecoverState {}

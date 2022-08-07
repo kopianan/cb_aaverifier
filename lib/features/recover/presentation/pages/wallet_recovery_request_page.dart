@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:coinbit_ui_mobile/coinbit_ui_mobile.dart';
 import 'package:coinbit_verifier/features/dkg/presentation/bloc/dkg_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -20,10 +21,6 @@ class WalletRecoveryRequestPage extends StatefulWidget {
 class _WalletRecoveryRequestPageState extends State<WalletRecoveryRequestPage> {
   @override
   void initState() {
-    // context.read<RecoverBloc>().add(RecoverProccess(
-    //     index: index,
-    //     encryptedKeyShared: encryptedKeyShared,
-    //     address: address));
     super.initState();
   }
 
@@ -34,11 +31,7 @@ class _WalletRecoveryRequestPageState extends State<WalletRecoveryRequestPage> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => RecoverBloc()
-            ..add(RecoverProccess(
-              index: 2,
-              address: address,
-            )),
+          create: (context) => RecoverBloc(),
         ),
       ],
       child: BlocConsumer<RecoverBloc, RecoverState>(
@@ -48,7 +41,20 @@ class _WalletRecoveryRequestPageState extends State<WalletRecoveryRequestPage> {
             appBar: AppBar(
               title: Text("Wallet Recovering"),
             ),
-            body: Container(),
+            body: Container(
+              child: Column(
+                children: [
+                  CBBtnPrimary(
+                    text: "Approve Recovering Request",
+                    onPressed: () async {
+                      context
+                          .read<RecoverBloc>()
+                          .add(RecoverProccess(index: 2));
+                    },
+                  )
+                ],
+              ),
+            ),
           );
         },
       ),
